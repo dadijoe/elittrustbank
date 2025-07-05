@@ -1009,6 +1009,8 @@ const AdminDashboard = () => {
         </div>
       )}
 
+      {activeTab === 'credit-debit' && <CreditDebitForm allUsers={allUsers} />}
+
       {activeTab === 'all-users' && (
         <div className="bg-white rounded-lg shadow">
           <div className="p-6">
