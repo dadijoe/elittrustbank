@@ -86,6 +86,7 @@ class Transaction(BaseModel):
     admin_notes: Optional[str] = None
 
 class TransactionCreate(BaseModel):
+    from_account_type: str = "checking"  # "checking" or "savings"
     to_user_id: Optional[str] = None
     to_account_info: Optional[str] = None
     amount: float
