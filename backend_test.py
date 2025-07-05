@@ -188,6 +188,50 @@ class BankAPITester:
             token=self.admin_token
         )
         return success
+        
+    def test_specific_transaction_approval(self, transaction_id, user_id, amount):
+        """Test approving a specific transaction after adding funds to user"""
+        if not self.admin_token:
+            print("❌ Admin token not available, skipping test")
+            return False
+            
+        # First, add funds to the user
+        print(f"\n🔍 Adding ${amount} to user {user_id}...")
+        success, response = self.run_test(
+            "Add Funds to User",
+            "POST",
+            "admin/manual-transaction",
+            200,
+            data={
+                "user_id": user_id,
+                "action": "credit",
+                "amount": amount,
+                "account_type": "checking",
+                "description": "Adding funds for transaction approval test"
+            },
+            token=self.admin_token
+        )
+        
+        if not success:
+            print("❌ Failed to add funds to user")
+            return False
+            
+        # Now approve the transaction
+        print(f"\n🔍 Approving transaction {transaction_id}...")
+        success, response = self.run_test(
+            "Approve Specific Transaction",
+            "POST",
+            f"admin/process-transaction?transaction_id={transaction_id}&action=approve",
+            200,
+            token=self.admin_token
+        )
+        
+        if success:
+            print(f"✅ Transaction {transaction_id} approved successfully")
+        else:
+            print(f"❌ Failed to approve transaction {transaction_id}")
+            
+        return success
 
     def run_all_tests(self):
         """Run all tests in sequence"""
