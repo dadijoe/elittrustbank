@@ -484,6 +484,7 @@ const Dashboard = () => {
 };
 
 const CustomerDashboard = ({ dashboard }) => {
+  const { logout } = React.useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('overview');
 
   return (
