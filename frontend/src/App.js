@@ -1675,6 +1675,50 @@ const AdminDashboard = () => {
 
       {activeTab === 'credit-debit' && <CreditDebitForm allUsers={allUsers} />}
 
+      {activeTab === 'active-sessions' && (
+        <div className="bg-white rounded-lg shadow">
+          <div className="p-6">
+            <h3 className="text-lg font-semibold text-navy-900 mb-4">Active User Sessions</h3>
+            <div className="space-y-4">
+              {activeSessions.map((session, index) => (
+                <div key={index} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-900">{session.full_name}</h4>
+                      <p className="text-sm text-gray-500">Email: {session.email}</p>
+                      <p className="text-sm text-gray-500">User ID: {session.id}</p>
+                      <p className="text-sm text-gray-500">
+                        Last Activity: {new Date(session.last_activity).toLocaleDateString()} at {new Date(session.last_activity).toLocaleTimeString()}
+                      </p>
+                      {session.force_logout_at && (
+                        <p className="text-sm text-red-500">
+                          Force Logged Out: {new Date(session.force_logout_at).toLocaleDateString()} at {new Date(session.force_logout_at).toLocaleTimeString()}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleForceLogout(session.id)}
+                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+                        disabled={session.force_logout_at}
+                      >
+                        {session.force_logout_at ? 'Logged Out' : 'Force Logout'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              
+              {activeSessions.length === 0 && (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">No active user sessions</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {activeTab === 'all-users' && (
         <div className="bg-white rounded-lg shadow">
           <div className="p-6">
