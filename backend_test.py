@@ -2,6 +2,7 @@ import requests
 import time
 import uuid
 from datetime import datetime
+import sys
 
 class BankAPITester:
     def __init__(self, base_url):
