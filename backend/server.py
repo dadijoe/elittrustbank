@@ -136,6 +136,10 @@ async def get_admin_user(current_user: User = Depends(get_current_user)):
     return current_user
 
 # Routes
+@api_router.get("/")
+async def root():
+    return {"message": "SecureBank API is running"}
+
 @api_router.post("/signup")
 async def signup(user_data: UserSignup):
     # Check unique code
