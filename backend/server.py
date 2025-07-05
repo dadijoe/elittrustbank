@@ -292,31 +292,41 @@ async def process_transaction(transaction_id: str, action: str, admin_user: User
         raise HTTPException(status_code=404, detail="Transaction not found")
     
     if action == "approve":
-        # Update balances
+        # Get sender user
         from_user = await db.users.find_one({"id": transaction["from_user_id"]})
-        if from_user["checking_balance"] >= transaction["amount"]:
-            # Deduct from sender
-            await db.users.update_one(
-                {"id": transaction["from_user_id"]},
-                {"$inc": {"checking_balance": -transaction["amount"]}}
-            )
-            
-            # Add to receiver (if internal transfer)
-            if transaction["to_user_id"]:
+        if not from_user:
+            raise HTTPException(status_code=404, detail="Sender user not found")
+        
+        # Check if sender has sufficient funds
+        if from_user["checking_balance"] < transaction["amount"]:
+            raise HTTPException(status_code=400, detail="Insufficient funds")
+        
+        # Deduct from sender's checking account
+        await db.users.update_one(
+            {"id": transaction["from_user_id"]},
+            {"$inc": {"checking_balance": -transaction["amount"]}}
+        )
+        
+        # Add to receiver only for internal transfers
+        if transaction["transaction_type"] == "internal" and transaction["to_user_id"]:
+            # Find receiver user
+            to_user = await db.users.find_one({"id": transaction["to_user_id"]})
+            if to_user:
                 await db.users.update_one(
                     {"id": transaction["to_user_id"]},
                     {"$inc": {"checking_balance": transaction["amount"]}}
                 )
-            
-            # Update transaction status
-            await db.transactions.update_one(
-                {"id": transaction_id},
-                {"$set": {"status": "approved", "approved_at": datetime.utcnow()}}
-            )
-            
-            return {"message": "Transaction approved successfully"}
-        else:
-            raise HTTPException(status_code=400, detail="Insufficient funds")
+        
+        # For domestic and international transfers, money goes out of the system
+        # so we only deduct from sender (already done above)
+        
+        # Update transaction status
+        await db.transactions.update_one(
+            {"id": transaction_id},
+            {"$set": {"status": "approved", "approved_at": datetime.utcnow()}}
+        )
+        
+        return {"message": "Transaction approved successfully"}
     
     elif action == "decline":
         await db.transactions.update_one(
