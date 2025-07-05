@@ -308,8 +308,43 @@ class BankAPITester:
             print("❌ Admin login failed, stopping test")
             return self.report_results()
             
-        # Get all users to find the correct user ID
-        print("\n🔍 Getting all users to find the correct user ID...")
+        # Get pending transactions to find the correct transaction
+        print("\n🔍 Getting pending transactions to find the correct transaction...")
+        success, transactions = self.run_test(
+            "Get Pending Transactions",
+            "GET",
+            "admin/pending-transactions",
+            200,
+            token=self.admin_token
+        )
+        
+        if not success:
+            print("❌ Failed to get pending transactions")
+            return self.report_results()
+            
+        # Find the specific transaction
+        transaction = None
+        for t in transactions:
+            if t.get('id') == transaction_id:
+                transaction = t
+                print(f"✅ Found transaction: {transaction_id}")
+                print(f"Transaction details: {t}")
+                break
+                
+        if not transaction:
+            print(f"❌ Could not find transaction with ID {transaction_id}")
+            return self.report_results()
+            
+        # Get the user ID from the transaction
+        user_id = transaction.get('from_user_id')
+        if not user_id:
+            print("❌ Could not find user ID in transaction")
+            return self.report_results()
+            
+        print(f"✅ Found user ID from transaction: {user_id}")
+            
+        # Get all users to verify the user exists
+        print("\n🔍 Getting all users to verify the user exists...")
         success, users = self.run_test(
             "Get All Users",
             "GET",
@@ -322,22 +357,21 @@ class BankAPITester:
             print("❌ Failed to get users")
             return self.report_results()
             
-        # Find the user with the matching partial ID
-        full_user_id = None
-        for user in users:
-            if user.get('id', '').startswith(partial_user_id):
-                full_user_id = user.get('id')
-                print(f"✅ Found user with full ID: {full_user_id}")
-                print(f"User details: {user.get('full_name')} ({user.get('email')})")
+        # Find the user
+        user = None
+        for u in users:
+            if u.get('id') == user_id:
+                user = u
+                print(f"✅ Found user: {user.get('full_name')} ({user.get('email')})")
                 print(f"Current balance: ${user.get('checking_balance', 0)}")
                 break
                 
-        if not full_user_id:
-            print(f"❌ Could not find user with ID starting with {partial_user_id}")
+        if not user:
+            print(f"❌ Could not find user with ID {user_id}")
             return self.report_results()
             
         # Test the specific transaction approval
-        if not self.test_specific_transaction_approval(transaction_id, full_user_id, amount):
+        if not self.test_specific_transaction_approval(transaction_id, user_id, amount):
             print("❌ Transaction approval test failed")
             return self.report_results()
             
