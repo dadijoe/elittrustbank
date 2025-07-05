@@ -162,7 +162,16 @@ async def signup(user_data: UserSignup):
 @api_router.post("/login")
 async def login(user_data: UserLogin):
     user = await db.users.find_one({"email": user_data.email})
-    if not user or not verify_password(user_data.password, user["hashed_password"]):
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    # Check if hashed_password exists
+    if "hashed_password" not in user:
+        # For debugging
+        logging.error(f"User found but missing hashed_password field: {user}")
+        raise HTTPException(status_code=500, detail="User account is incomplete")
+    
+    if not verify_password(user_data.password, user["hashed_password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     if not user["is_approved"]:
