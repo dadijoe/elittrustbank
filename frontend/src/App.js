@@ -619,6 +619,82 @@ const Dashboard = () => {
 const CustomerDashboard = ({ dashboard }) => {
   const { logout } = React.useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('overview');
+  const [liveData, setLiveData] = useState(dashboard);
+  const [incomeOutcomeStats, setIncomeOutcomeStats] = useState({
+    income: 0,
+    outcome: 0,
+    monthlyData: []
+  });
+
+  // Real-time data fetching
+  useEffect(() => {
+    setLiveData(dashboard);
+    calculateIncomeOutcome(dashboard?.recent_transactions || []);
+    
+    // Set up polling for real-time updates
+    const interval = setInterval(async () => {
+      try {
+        const response = await axios.get(`${API}/dashboard`);
+        setLiveData(response.data);
+        calculateIncomeOutcome(response.data?.recent_transactions || []);
+      } catch (error) {
+        console.error('Error fetching live data:', error);
+      }
+    }, 5000); // Poll every 5 seconds for real-time updates
+
+    return () => clearInterval(interval);
+  }, [dashboard]);
+
+  const calculateIncomeOutcome = (transactions) => {
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+    
+    let income = 0;
+    let outcome = 0;
+    const monthlyData = Array(7).fill(0).map((_, index) => {
+      const month = new Date();
+      month.setMonth(currentMonth - (6 - index));
+      return {
+        month: month.toLocaleDateString('en-US', { month: 'short' }),
+        income: 0,
+        outcome: 0
+      };
+    });
+
+    transactions.forEach(transaction => {
+      const transactionDate = new Date(transaction.created_at);
+      const transactionMonth = transactionDate.getMonth();
+      const transactionYear = transactionDate.getFullYear();
+      
+      // Calculate current month totals
+      if (transactionMonth === currentMonth && transactionYear === currentYear) {
+        if (transaction.transaction_type === 'credit' || 
+            (transaction.transaction_type === 'self' && transaction.to_user_id === liveData?.user?.id)) {
+          income += transaction.amount;
+        } else {
+          outcome += transaction.amount;
+        }
+      }
+      
+      // Calculate monthly data for graph
+      const monthIndex = monthlyData.findIndex(m => {
+        const targetMonth = new Date();
+        targetMonth.setMonth(currentMonth - (6 - monthlyData.indexOf(m)));
+        return targetMonth.getMonth() === transactionMonth && targetMonth.getFullYear() === transactionYear;
+      });
+      
+      if (monthIndex !== -1) {
+        if (transaction.transaction_type === 'credit' || 
+            (transaction.transaction_type === 'self' && transaction.to_user_id === liveData?.user?.id)) {
+          monthlyData[monthIndex].income += transaction.amount;
+        } else {
+          monthlyData[monthIndex].outcome += transaction.amount;
+        }
+      }
+    });
+
+    setIncomeOutcomeStats({ income, outcome, monthlyData });
+  };
 
   return (
     <div className="flex h-screen bg-gray-50">
