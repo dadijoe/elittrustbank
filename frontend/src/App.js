@@ -841,66 +841,54 @@ const CustomerDashboard = ({ dashboard }) => {
                     <div className="grid grid-cols-2 gap-6 mb-8">
                       <div>
                         <div className="text-gray-500 text-sm font-medium mb-1">Income</div>
-                        <div className="text-2xl font-bold text-green-600">$9,650.00</div>
+                        <div className="text-2xl font-bold text-green-600">${incomeOutcomeStats.income.toFixed(2)}</div>
                         <div className="text-green-600 text-sm flex items-center mt-1">
                           <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
                           </svg>
-                          +8.5%
+                          Live Updates
                         </div>
                       </div>
                       <div>
                         <div className="text-gray-500 text-sm font-medium mb-1">Expense</div>
-                        <div className="text-2xl font-bold text-red-500">$5,150.00</div>
+                        <div className="text-2xl font-bold text-red-500">${incomeOutcomeStats.outcome.toFixed(2)}</div>
                         <div className="text-red-500 text-sm flex items-center mt-1">
                           <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
                           </svg>
-                          -2.3%
+                          Real-time
                         </div>
                       </div>
                     </div>
 
-                    {/* Simple Bar Chart */}
+                    {/* Live Graph */}
                     <div className="space-y-3">
                       <div className="flex justify-between text-sm text-gray-500 mb-4">
-                        <span>Jan</span>
-                        <span>Feb</span>
-                        <span>Mar</span>
-                        <span>Apr</span>
-                        <span>May</span>
-                        <span>Jun</span>
-                        <span>Jul</span>
+                        {incomeOutcomeStats.monthlyData.map((data, index) => (
+                          <span key={index}>{data.month}</span>
+                        ))}
                       </div>
                       <div className="flex justify-between items-end space-x-2 h-32">
-                        <div className="flex flex-col items-center space-y-1 flex-1">
-                          <div className="bg-blue-100 w-full h-16 rounded-t"></div>
-                          <div className="bg-blue-600 w-full h-12 rounded-b"></div>
-                        </div>
-                        <div className="flex flex-col items-center space-y-1 flex-1">
-                          <div className="bg-blue-100 w-full h-20 rounded-t"></div>
-                          <div className="bg-blue-600 w-full h-8 rounded-b"></div>
-                        </div>
-                        <div className="flex flex-col items-center space-y-1 flex-1">
-                          <div className="bg-blue-100 w-full h-24 rounded-t"></div>
-                          <div className="bg-blue-600 w-full h-16 rounded-b"></div>
-                        </div>
-                        <div className="flex flex-col items-center space-y-1 flex-1">
-                          <div className="bg-blue-100 w-full h-18 rounded-t"></div>
-                          <div className="bg-blue-600 w-full h-10 rounded-b"></div>
-                        </div>
-                        <div className="flex flex-col items-center space-y-1 flex-1">
-                          <div className="bg-blue-100 w-full h-28 rounded-t"></div>
-                          <div className="bg-blue-600 w-full h-20 rounded-b"></div>
-                        </div>
-                        <div className="flex flex-col items-center space-y-1 flex-1">
-                          <div className="bg-blue-100 w-full h-22 rounded-t"></div>
-                          <div className="bg-blue-600 w-full h-14 rounded-b"></div>
-                        </div>
-                        <div className="flex flex-col items-center space-y-1 flex-1">
-                          <div className="bg-blue-100 w-full h-26 rounded-t"></div>
-                          <div className="bg-blue-600 w-full h-18 rounded-b"></div>
-                        </div>
+                        {incomeOutcomeStats.monthlyData.map((data, index) => {
+                          const maxValue = Math.max(...incomeOutcomeStats.monthlyData.map(d => Math.max(d.income, d.outcome)));
+                          const incomeHeight = maxValue > 0 ? (data.income / maxValue) * 80 + 20 : 20;
+                          const outcomeHeight = maxValue > 0 ? (data.outcome / maxValue) * 80 + 20 : 20;
+                          
+                          return (
+                            <div key={index} className="flex flex-col items-center space-y-1 flex-1">
+                              <div 
+                                className="bg-blue-100 w-full rounded-t transition-all duration-500" 
+                                style={{ height: `${incomeHeight}px` }}
+                                title={`Income: $${data.income.toFixed(2)}`}
+                              ></div>
+                              <div 
+                                className="bg-blue-600 w-full rounded-b transition-all duration-500" 
+                                style={{ height: `${outcomeHeight}px` }}
+                                title={`Expense: $${data.outcome.toFixed(2)}`}
+                              ></div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
