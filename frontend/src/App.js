@@ -306,6 +306,7 @@ const HomePage = () => {
       {/* Modals */}
       {showSignup && <SignupModal onClose={() => setShowSignup(false)} />}
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
+      {showServiceUnavailable && <ServiceUnavailableModal onClose={() => setShowServiceUnavailable(false)} />}
     </div>
   );
 };
