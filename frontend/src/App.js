@@ -811,7 +811,7 @@ const CustomerDashboard = ({ dashboard }) => {
                         </div>
                         <div className="absolute bottom-6 left-6">
                           <div className="text-blue-100 text-sm font-medium mb-1">Balance</div>
-                          <div className="text-2xl font-bold">${dashboard.user.checking_balance.toFixed(2)}</div>
+                          <div className="text-2xl font-bold">${liveData?.user?.checking_balance?.toFixed(2) || '0.00'}</div>
                           <div className="text-blue-100 text-sm mt-2">**** **** **** 4255</div>
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10"></div>
@@ -824,7 +824,7 @@ const CustomerDashboard = ({ dashboard }) => {
                         </div>
                         <div className="absolute bottom-6 left-6">
                           <div className="text-gray-500 text-sm font-medium mb-1">Savings</div>
-                          <div className="text-2xl font-bold text-gray-700">${dashboard.user.savings_balance.toFixed(2)}</div>
+                          <div className="text-2xl font-bold text-gray-700">${liveData?.user?.savings_balance?.toFixed(2) || '0.00'}</div>
                           <div className="text-gray-500 text-sm mt-2">**** **** **** 2847</div>
                         </div>
                       </div>
