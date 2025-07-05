@@ -209,6 +209,11 @@ async def login(user_data: UserLogin):
 
 @api_router.get("/dashboard")
 async def get_dashboard(current_user: User = Depends(get_current_user)):
+    # Get fresh user data to ensure current balances
+    fresh_user = await db.users.find_one({"id": current_user.id})
+    if not fresh_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
     # Get recent transactions
     transactions = await db.transactions.find({
         "$or": [
@@ -223,7 +228,7 @@ async def get_dashboard(current_user: User = Depends(get_current_user)):
             transaction['_id'] = str(transaction['_id'])
     
     return {
-        "user": current_user.dict(),
+        "user": fresh_user,
         "recent_transactions": transactions
     }
 
