@@ -490,8 +490,8 @@ const CustomerDashboard = ({ dashboard }) => {
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-sm border-r border-gray-100">
-        <div className="p-6">
+      <div className="w-64 bg-white shadow-sm border-r border-gray-100 relative">
+        <div className="p-6 h-full flex flex-col">
           <div className="flex items-center space-x-3 mb-8">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -501,7 +501,7 @@ const CustomerDashboard = ({ dashboard }) => {
             <span className="text-xl font-semibold text-gray-900">SecureBank</span>
           </div>
           
-          <nav className="space-y-2">
+          <nav className="space-y-2 flex-1">
             <button
               onClick={() => setActiveTab('overview')}
               className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${
