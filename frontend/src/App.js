@@ -936,7 +936,7 @@ const CustomerDashboard = ({ dashboard }) => {
                       </button>
                     </div>
                     <div className="space-y-4">
-                      {dashboard.recent_transactions.slice(0, 4).map((transaction, index) => (
+                      {(liveData?.recent_transactions || []).slice(0, 4).map((transaction, index) => (
                         <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
                           <div className="flex items-center space-x-3">
                             <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
@@ -984,7 +984,7 @@ const CustomerDashboard = ({ dashboard }) => {
                         </div>
                       ))}
                       
-                      {dashboard.recent_transactions.length === 0 && (
+                      {(!liveData?.recent_transactions || liveData.recent_transactions.length === 0) && (
                         <div className="text-center py-8 text-gray-500">
                           <svg className="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h2m2-2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2m0 0V3a2 2 0 00-2 2v0m2 0v2M7 21h10a2 2 0 002-2v-6a2 2 0 00-2-2H7a2 2 0 00-2 2v6a2 2 0 002 2z" />
