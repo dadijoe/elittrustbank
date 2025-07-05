@@ -1373,10 +1373,20 @@ const AdminDashboard = () => {
 
   const handleTransactionAction = async (transactionId, action) => {
     try {
-      await axios.post(`${API}/admin/process-transaction?transaction_id=${transactionId}&action=${action}`);
-      fetchPendingTransactions();
+      const response = await axios.post(`${API}/admin/process-transaction?transaction_id=${transactionId}&action=${action}`);
+      
+      if (response.status === 200) {
+        // Refresh the pending transactions list
+        fetchPendingTransactions();
+        // Also refresh all users to see updated balances
+        fetchAllUsers();
+        
+        // Show success message
+        alert(`Transaction ${action}d successfully!`);
+      }
     } catch (error) {
       console.error('Error processing transaction:', error);
+      alert(`Error: ${error.response?.data?.detail || `Failed to ${action} transaction`}`);
     }
   };
 
