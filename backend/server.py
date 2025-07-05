@@ -229,10 +229,31 @@ async def get_dashboard(current_user: User = Depends(get_current_user)):
 
 @api_router.post("/transfer")
 async def create_transfer(transfer_data: TransactionCreate, current_user: User = Depends(get_current_user)):
+    # Validate the from_account_type
+    if transfer_data.from_account_type not in ["checking", "savings"]:
+        raise HTTPException(status_code=400, detail="Invalid account type")
+    
+    # Check account balance before creating transaction
+    current_balance = getattr(current_user, f"{transfer_data.from_account_type}_balance")
+    if current_balance < transfer_data.amount:
+        raise HTTPException(status_code=400, detail=f"Insufficient funds in {transfer_data.from_account_type} account")
+    
+    # Handle self transfers (between user's own accounts)
+    if transfer_data.transaction_type == "self":
+        if not transfer_data.to_account_info:
+            raise HTTPException(status_code=400, detail="Destination account must be specified for self transfers")
+        
+        if transfer_data.to_account_info not in ["checking", "savings"]:
+            raise HTTPException(status_code=400, detail="Invalid destination account type")
+        
+        if transfer_data.from_account_type == transfer_data.to_account_info:
+            raise HTTPException(status_code=400, detail="Cannot transfer to the same account")
+    
     # Create transaction
     transaction = Transaction(
         from_user_id=current_user.id,
-        **transfer_data.dict()
+        from_account_type=transfer_data.from_account_type,
+        **transfer_data.dict(exclude={"from_account_type"})
     )
     
     await db.transactions.insert_one(transaction.dict())
