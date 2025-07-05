@@ -1429,6 +1429,33 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchActiveSessions = async () => {
+    try {
+      const response = await axios.get(`${API}/admin/active-sessions`);
+      setActiveSessions(response.data);
+    } catch (error) {
+      console.error('Error fetching active sessions:', error);
+    }
+  };
+
+  const handleForceLogout = async (userId) => {
+    try {
+      const response = await axios.post(`${API}/admin/force-logout`, {
+        user_id: userId,
+        action: 'force-logout'
+      });
+      
+      if (response.status === 200) {
+        // Refresh active sessions
+        fetchActiveSessions();
+        alert('User has been logged out successfully!');
+      }
+    } catch (error) {
+      console.error('Error forcing logout:', error);
+      alert(`Error: ${error.response?.data?.detail || 'Failed to logout user'}`);
+    }
+  };
+
   const handleUserAction = async (userId, action) => {
     try {
       const response = await axios.post(`${API}/admin/approve-user`, {
