@@ -75,10 +75,11 @@ class UserLogin(BaseModel):
 class Transaction(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     from_user_id: str
+    from_account_type: str = "checking"  # "checking" or "savings"
     to_user_id: Optional[str] = None
     to_account_info: Optional[str] = None  # For external transfers
     amount: float
-    transaction_type: str  # "internal", "domestic", "international"
+    transaction_type: str  # "internal", "domestic", "international", "self"
     description: str
     status: str = "pending"  # pending, approved, declined
     created_at: datetime = Field(default_factory=datetime.utcnow)
