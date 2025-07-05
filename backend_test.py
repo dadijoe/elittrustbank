@@ -317,11 +317,21 @@ class BankAPITester:
         return self.report_results()
 
 if __name__ == "__main__":
-    # Get the backend URL from the frontend .env file
-    import os
-    
     # Use the public endpoint from the frontend .env file
     backend_url = "https://4d7018b7-5a0c-4fa2-a488-2cc75af693d2.preview.emergentagent.com"
     
-    tester = BankAPITester(backend_url)
-    exit_code = tester.run_all_tests()
+    # Check if we're running the specific transaction approval test
+    if len(sys.argv) > 1 and sys.argv[1] == "test_transaction_approval":
+        # Transaction details from the request
+        transaction_id = "c59bf2ab-db9c-4986-a39b-f9444d01f861"
+        user_id = "bb879107-e252-42ad-b6ec-b83e5589586"  # This might be partial
+        amount = 15000.0
+        
+        tester = BankAPITester(backend_url)
+        exit_code = tester.test_transaction_approval_fix(transaction_id, user_id, amount)
+    else:
+        # Run all tests
+        tester = BankAPITester(backend_url)
+        exit_code = tester.run_all_tests()
+        
+    sys.exit(exit_code)
