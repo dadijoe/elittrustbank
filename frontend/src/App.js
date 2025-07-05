@@ -793,6 +793,189 @@ const TransactionHistory = () => {
   );
 };
 
+const CreditDebitForm = ({ allUsers }) => {
+  const [formData, setFormData] = useState({
+    user_id: '',
+    account_type: 'checking',
+    transaction_type: 'credit',
+    amount: '',
+    description: '',
+    backdate: ''
+  });
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    
+    try {
+      const requestData = {
+        user_id: formData.user_id,
+        action: formData.transaction_type,
+        amount: parseFloat(formData.amount),
+        account_type: formData.account_type,
+        description: formData.description
+      };
+
+      await axios.post(`${API}/admin/manual-transaction`, requestData);
+      setSuccess(true);
+      setFormData({
+        user_id: '',
+        account_type: 'checking',
+        transaction_type: 'credit',
+        amount: '',
+        description: '',
+        backdate: ''
+      });
+    } catch (error) {
+      setError(error.response?.data?.detail || 'Transaction failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const runBulkOperations = () => {
+    // Placeholder for bulk operations functionality
+    alert('Bulk operations feature would be implemented here');
+  };
+
+  if (success) {
+    return (
+      <div className="bg-white rounded-lg shadow p-6">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-navy-900 mb-2">Transaction Completed!</h3>
+          <p className="text-gray-600 mb-4">The {formData.transaction_type} transaction has been processed successfully.</p>
+          <button
+            onClick={() => setSuccess(false)}
+            className="bg-navy-900 text-white px-6 py-2 rounded-lg hover:bg-navy-800 transition-colors"
+          >
+            New Transaction
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-lg shadow p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-lg font-semibold text-navy-900">Credit/Debit Account</h3>
+        <button
+          onClick={runBulkOperations}
+          className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+        >
+          Run Bulk Operations
+        </button>
+      </div>
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Account</label>
+            <select
+              value={formData.user_id}
+              onChange={(e) => setFormData({...formData, user_id: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
+              required
+            >
+              <option value="">Select account</option>
+              {allUsers.filter(user => user.role !== 'admin').map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.full_name} ({user.email}) - Checking: ${user.checking_balance.toFixed(2)}, Savings: ${user.savings_balance.toFixed(2)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Transaction Type</label>
+            <select
+              value={formData.transaction_type}
+              onChange={(e) => setFormData({...formData, transaction_type: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
+            >
+              <option value="credit">Credit (Add Money)</option>
+              <option value="debit">Debit (Subtract Money)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Account Type</label>
+            <select
+              value={formData.account_type}
+              onChange={(e) => setFormData({...formData, account_type: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
+            >
+              <option value="checking">Checking Account</option>
+              <option value="savings">Savings Account</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Amount</label>
+            <div className="relative">
+              <span className="absolute left-3 top-2 text-gray-500">$</span>
+              <input
+                type="number"
+                step="0.01"
+                required
+                value={formData.amount}
+                onChange={(e) => setFormData({...formData, amount: e.target.value})}
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
+                placeholder="0.00"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+          <textarea
+            required
+            value={formData.description}
+            onChange={(e) => setFormData({...formData, description: e.target.value})}
+            rows="3"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
+            placeholder="Enter transaction description"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Backdate (Optional)</label>
+          <input
+            type="datetime-local"
+            value={formData.backdate}
+            onChange={(e) => setFormData({...formData, backdate: e.target.value})}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
+          />
+        </div>
+
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className={`w-full py-2 rounded-lg transition-colors ${
+            loading 
+              ? 'bg-gray-400 text-gray-700 cursor-not-allowed' 
+              : 'bg-blue-600 text-white hover:bg-blue-700'
+          }`}
+        >
+          {loading ? 'Processing...' : `${formData.transaction_type === 'credit' ? 'Credit' : 'Debit'} Account`}
+        </button>
+      </form>
+    </div>
+  );
+};
+
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('pending-users');
   const [pendingUsers, setPendingUsers] = useState([]);
