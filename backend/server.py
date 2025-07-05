@@ -321,25 +321,36 @@ async def process_transaction(transaction_id: str, action: str, admin_user: User
         if not from_user:
             raise HTTPException(status_code=404, detail="Sender user not found")
         
-        # Check if sender has sufficient funds
-        if from_user["checking_balance"] < transaction["amount"]:
-            raise HTTPException(status_code=400, detail="Insufficient funds")
+        # Determine which account to check balance from
+        from_account_field = f"{transaction.get('from_account_type', 'checking')}_balance"
+        from_balance = from_user.get(from_account_field, 0)
         
-        # Deduct from sender's checking account
+        # Check if sender has sufficient funds in the specified account
+        if from_balance < transaction["amount"]:
+            raise HTTPException(status_code=400, detail=f"Insufficient funds in {transaction.get('from_account_type', 'checking')} account")
+        
+        # Deduct from sender's specified account
         await db.users.update_one(
             {"id": transaction["from_user_id"]},
-            {"$inc": {"checking_balance": -transaction["amount"]}}
+            {"$inc": {from_account_field: -transaction["amount"]}}
         )
         
-        # Add to receiver only for internal transfers
+        # Handle different transaction types
         if transaction["transaction_type"] == "internal" and transaction["to_user_id"]:
-            # Find receiver user
+            # Internal transfer to another user's checking account
             to_user = await db.users.find_one({"id": transaction["to_user_id"]})
             if to_user:
                 await db.users.update_one(
                     {"id": transaction["to_user_id"]},
                     {"$inc": {"checking_balance": transaction["amount"]}}
                 )
+        elif transaction["transaction_type"] == "self":
+            # Self transfer between user's own accounts
+            to_account_field = f"{transaction['to_account_info']}_balance"
+            await db.users.update_one(
+                {"id": transaction["from_user_id"]},
+                {"$inc": {to_account_field: transaction["amount"]}}
+            )
         
         # For domestic and international transfers, money goes out of the system
         # so we only deduct from sender (already done above)
