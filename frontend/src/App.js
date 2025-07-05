@@ -66,6 +66,7 @@ const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
+      {showSuspiciousLogin && <SuspiciousLoginModal onClose={() => setShowSuspiciousLogin(false)} />}
     </AuthContext.Provider>
   );
 };
