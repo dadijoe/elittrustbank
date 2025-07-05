@@ -901,7 +901,7 @@ const CustomerDashboard = ({ dashboard }) => {
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Balance</h3>
                     <div className="text-center">
                       <div className="text-3xl font-bold text-gray-900 mb-2">
-                        ${(dashboard.user.checking_balance + dashboard.user.savings_balance).toFixed(2)}
+                        ${((liveData?.user?.checking_balance || 0) + (liveData?.user?.savings_balance || 0)).toFixed(2)}
                       </div>
                       <div className="text-gray-500 text-sm mb-6">Total balance</div>
                       
@@ -909,14 +909,14 @@ const CustomerDashboard = ({ dashboard }) => {
                         <div className="text-center">
                           <div className="flex items-center justify-center mb-2">
                             <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                            <span className="text-gray-600">+$6,300.15</span>
+                            <span className="text-gray-600">+${incomeOutcomeStats.income.toFixed(2)}</span>
                           </div>
                           <div className="text-gray-400">Income</div>
                         </div>
                         <div className="text-center">
                           <div className="flex items-center justify-center mb-2">
                             <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                            <span className="text-gray-600">-$1,999.00</span>
+                            <span className="text-gray-600">-${incomeOutcomeStats.outcome.toFixed(2)}</span>
                           </div>
                           <div className="text-gray-400">Outcome</div>
                         </div>
