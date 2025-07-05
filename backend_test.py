@@ -294,6 +294,27 @@ class BankAPITester:
         else:
             print(f"\n❌ {self.tests_run - self.tests_passed} tests failed")
             return 1
+            
+    def test_transaction_approval_fix(self, transaction_id, user_id, amount):
+        """Run only the transaction approval fix test"""
+        print("\n🏦 Testing Transaction Approval Fix 🏦\n")
+        print(f"Base URL: {self.base_url}")
+        print(f"Transaction ID: {transaction_id}")
+        print(f"User ID: {user_id}")
+        print(f"Amount to add: ${amount}\n")
+        
+        # Admin login
+        if not self.test_admin_login():
+            print("❌ Admin login failed, stopping test")
+            return self.report_results()
+            
+        # Test the specific transaction approval
+        if not self.test_specific_transaction_approval(transaction_id, user_id, amount):
+            print("❌ Transaction approval test failed")
+            return self.report_results()
+            
+        print("\n✅ Transaction approval test passed!")
+        return self.report_results()
 
 if __name__ == "__main__":
     # Get the backend URL from the frontend .env file
