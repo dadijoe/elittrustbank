@@ -341,6 +341,16 @@ async def process_transaction(transaction_id: str, action: str, admin_user: User
 
 @api_router.post("/admin/manual-transaction")
 async def manual_transaction(action: AdminAction, admin_user: User = Depends(get_admin_user)):
+    # Parse custom date if provided, otherwise use current time
+    transaction_date = datetime.utcnow()
+    if action.custom_date:
+        try:
+            # Parse ISO datetime string
+            transaction_date = datetime.fromisoformat(action.custom_date.replace('Z', '+00:00'))
+        except (ValueError, AttributeError):
+            # If parsing fails, use current time as fallback
+            transaction_date = datetime.utcnow()
+    
     if action.action == "credit":
         field = f"{action.account_type}_balance"
         await db.users.update_one(
@@ -348,7 +358,7 @@ async def manual_transaction(action: AdminAction, admin_user: User = Depends(get
             {"$inc": {field: action.amount}}
         )
         
-        # Create transaction record
+        # Create transaction record with custom date
         transaction = Transaction(
             from_user_id="system",
             to_user_id=action.user_id,
@@ -356,7 +366,8 @@ async def manual_transaction(action: AdminAction, admin_user: User = Depends(get
             transaction_type="credit",
             description=action.description or "Manual credit",
             status="approved",
-            approved_at=datetime.utcnow()
+            created_at=transaction_date,
+            approved_at=transaction_date
         )
         await db.transactions.insert_one(transaction.dict())
         
@@ -369,7 +380,7 @@ async def manual_transaction(action: AdminAction, admin_user: User = Depends(get
             {"$inc": {field: -action.amount}}
         )
         
-        # Create transaction record
+        # Create transaction record with custom date
         transaction = Transaction(
             from_user_id=action.user_id,
             to_user_id="system",
@@ -377,7 +388,8 @@ async def manual_transaction(action: AdminAction, admin_user: User = Depends(get
             transaction_type="debit",
             description=action.description or "Manual debit",
             status="approved",
-            approved_at=datetime.utcnow()
+            created_at=transaction_date,
+            approved_at=transaction_date
         )
         await db.transactions.insert_one(transaction.dict())
         
