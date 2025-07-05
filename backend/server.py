@@ -94,10 +94,11 @@ class TransactionCreate(BaseModel):
 
 class AdminAction(BaseModel):
     user_id: str
-    action: str  # "approve", "decline", "freeze", "unfreeze"
+    action: str  # "approve", "decline", "freeze", "unfreeze", "credit", "debit"
     amount: Optional[float] = None
     account_type: Optional[str] = None  # "checking", "savings"
     description: Optional[str] = None
+    custom_date: Optional[str] = None  # Admin-selected date/time in ISO format
 
 # Helper functions
 def verify_password(plain_password, hashed_password):
