@@ -424,7 +424,6 @@ const LoginModal = ({ onClose }) => {
 const Dashboard = () => {
   const { user, logout } = React.useContext(AuthContext);
   const [dashboard, setDashboard] = useState(null);
-  const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
     fetchDashboard();
@@ -452,29 +451,34 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <nav className="bg-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <div className="text-2xl font-bold text-navy-900">SecureBank</div>
+      {user.role === 'admin' ? (
+        <>
+          {/* Header for Admin */}
+          <nav className="bg-white shadow-lg">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between items-center h-16">
+                <div className="flex items-center">
+                  <div className="text-2xl font-bold text-navy-900">SecureBank</div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <span className="text-gray-700">Welcome, {user.full_name}</span>
+                  <button
+                    onClick={logout}
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-700">Welcome, {user.full_name}</span>
-              <button
-                onClick={logout}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
-              >
-                Logout
-              </button>
-            </div>
+          </nav>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <AdminDashboard />
           </div>
-        </div>
-      </nav>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {user.role === 'admin' ? <AdminDashboard /> : <CustomerDashboard dashboard={dashboard} />}
-      </div>
+        </>
+      ) : (
+        <CustomerDashboard dashboard={dashboard} />
+      )}
     </div>
   );
 };
