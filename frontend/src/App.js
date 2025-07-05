@@ -11,6 +11,7 @@ const AuthContext = React.createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showSuspiciousLogin, setShowSuspiciousLogin] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
