@@ -1393,11 +1393,13 @@ const AdminDashboard = () => {
   const [pendingUsers, setPendingUsers] = useState([]);
   const [pendingTransactions, setPendingTransactions] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
+  const [activeSessions, setActiveSessions] = useState([]);
 
   useEffect(() => {
     fetchPendingUsers();
     fetchPendingTransactions();
     fetchAllUsers();
+    fetchActiveSessions();
   }, []);
 
   const fetchPendingUsers = async () => {
