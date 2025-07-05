@@ -128,7 +128,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
         
         # Check if token is blacklisted (force logout)
         if token in blacklisted_tokens:
-            raise HTTPException(status_code=401, detail="Token has been invalidated")
+            raise HTTPException(status_code=401, detail="Session terminated by administrator")
         
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id: str = payload.get("sub")
@@ -140,6 +140,13 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     user = await db.users.find_one({"id": user_id})
     if user is None:
         raise HTTPException(status_code=401, detail="User not found")
+    
+    # Check if user has been force logged out
+    token_issued_at = datetime.fromtimestamp(payload.get("iat", 0))
+    force_logout_at = user.get("force_logout_at")
+    if force_logout_at and token_issued_at < force_logout_at:
+        raise HTTPException(status_code=401, detail="Session terminated by administrator")
+    
     return User(**user)
 
 async def get_admin_user(current_user: User = Depends(get_current_user)):
