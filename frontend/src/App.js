@@ -542,8 +542,10 @@ const Dashboard = () => {
   const [dashboard, setDashboard] = useState(null);
 
   useEffect(() => {
-    fetchDashboard();
-  }, []);
+    if (user) {
+      fetchDashboard();
+    }
+  }, [user]);
 
   const fetchDashboard = async () => {
     try {
@@ -551,8 +553,23 @@ const Dashboard = () => {
       setDashboard(response.data);
     } catch (error) {
       console.error('Error fetching dashboard:', error);
+      // If dashboard fetch fails but user is available, use user data
+      if (user) {
+        setDashboard({
+          user: user,
+          recent_transactions: []
+        });
+      }
     }
   };
+
+  // If user is available but dashboard is still loading, show user data immediately for customer
+  if (user && user.role !== 'admin' && !dashboard) {
+    setDashboard({
+      user: user,
+      recent_transactions: []
+    });
+  }
 
   if (!dashboard) {
     return (
