@@ -67,26 +67,45 @@ const HomePage = () => {
   const [showLogin, setShowLogin] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900">
-      {/* Header */}
-      <nav className="bg-white shadow-lg">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+      {/* Modern Header */}
+      <nav className="bg-white/95 backdrop-blur-sm shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <div className="text-2xl font-bold text-navy-900">SecureBank</div>
+          <div className="flex justify-between items-center h-20">
+            {/* Logo */}
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                </svg>
+              </div>
+              <span className="text-2xl font-bold text-gray-900">SecureBank</span>
+              <span className="text-sm bg-blue-100 text-blue-600 px-2 py-1 rounded-full font-medium">2.0</span>
             </div>
-            <div className="flex space-x-4">
+
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#about" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">About app</a>
+              <a href="#blog" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Blog</a>
+              <a href="#contact" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Contact</a>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex items-center space-x-4">
               <button
                 onClick={() => setShowLogin(true)}
-                className="bg-navy-900 text-white px-6 py-2 rounded-lg hover:bg-navy-800 transition-colors"
+                className="hidden md:block text-gray-600 hover:text-gray-900 font-medium transition-colors"
               >
-                Login
+                Log In
               </button>
               <button
                 onClick={() => setShowSignup(true)}
-                className="bg-gold-500 text-white px-6 py-2 rounded-lg hover:bg-gold-600 transition-colors"
+                className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all duration-200 flex items-center space-x-2 shadow-lg hover:shadow-xl"
               >
-                Open Account
+                <span>Open Account</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
               </button>
             </div>
           </div>
@@ -95,38 +114,131 @@ const HomePage = () => {
 
       {/* Hero Section */}
       <div className="relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-white">
-              <h1 className="text-5xl lg:text-6xl font-bold mb-6">
-                Bank with <span className="text-gold-400">Confidence</span>
-              </h1>
-              <p className="text-xl mb-8 text-gray-300">
-                Experience secure, modern banking with our professional platform. 
-                Your financial future starts here.
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Content */}
+            <div className="space-y-8">
+              <div>
+                <div className="inline-flex items-center space-x-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                  <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
+                  <span>Welcome</span>
+                </div>
+                <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                  Manage your
+                  <br />
+                  <span className="text-blue-600">finances simply</span>
+                  <br />
+                  and easily.
+                </h1>
+              </div>
+              
+              <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
+                A safe and friendly application for managing your own
+                portfolio. Manage your money easily with the free app
+                on our platform!
               </p>
-              <div className="flex space-x-4">
+              
+              <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={() => setShowSignup(true)}
-                  className="bg-gold-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gold-600 transition-colors"
+                  className="bg-blue-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-blue-700 transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl"
                 >
-                  Open Account Today
+                  <span>Read more</span>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
                 </button>
                 <button
                   onClick={() => setShowLogin(true)}
-                  className="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-navy-900 transition-colors"
+                  className="border-2 border-gray-200 text-gray-700 px-8 py-4 rounded-xl text-lg font-semibold hover:border-gray-300 hover:bg-gray-50 transition-all duration-200"
                 >
                   Secure Login
                 </button>
               </div>
             </div>
+
+            {/* Right Content - Floating Card */}
             <div className="relative">
-              <img
-                src="https://images.unsplash.com/photo-1574288061782-da2d3f79a72e"
-                alt="Modern Banking"
-                className="w-full h-96 object-cover rounded-lg shadow-2xl"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy-900/50 to-transparent rounded-lg"></div>
+              {/* Background Elements */}
+              <div className="absolute top-0 right-0 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-50"></div>
+              <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-50"></div>
+              
+              {/* Main Card */}
+              <div className="relative bg-white p-8 rounded-3xl shadow-2xl backdrop-blur-sm border border-gray-100">
+                {/* Notification */}
+                <div className="absolute -top-4 right-8 bg-white rounded-2xl shadow-lg p-4 border border-gray-100">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+                      <span className="text-orange-600 font-bold text-lg">N</span>
+                    </div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm font-semibold text-gray-900">Net payment</span>
+                        <span className="bg-green-100 text-green-600 text-xs px-2 py-1 rounded-full font-medium">new</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Today, 12:50 PM</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="flex items-center space-x-1">
+                        <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                        <span className="text-sm font-semibold">25.40</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Balance Card */}
+                <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-6 text-white relative overflow-hidden mt-8">
+                  <div className="absolute top-4 right-4">
+                    <svg className="w-8 h-8 text-white/80" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                  </div>
+                  <div className="relative z-10">
+                    <p className="text-blue-100 text-sm font-medium mb-1">****4519</p>
+                    <div className="text-3xl font-bold mb-2">5,203.45 <span className="text-lg font-normal text-blue-200">USD</span></div>
+                    <p className="text-blue-200 text-sm">Total Balance</p>
+                    
+                    {/* User Avatar */}
+                    <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-white rounded-full p-1">
+                      <img 
+                        src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=64&h=64&fit=crop&crop=face&auto=format" 
+                        alt="User" 
+                        className="w-full h-full rounded-full object-cover"
+                      />
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10"></div>
+                </div>
+
+                {/* Stats */}
+                <div className="grid grid-cols-2 gap-6 mt-6">
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                      </svg>
+                    </div>
+                    <div className="text-lg font-bold text-gray-900">32 transfers</div>
+                    <div className="flex items-center justify-center space-x-1 text-sm text-gray-500">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span>Incoming</span>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                    </div>
+                    <div className="text-lg font-bold text-gray-900">4,209.48</div>
+                    <div className="flex items-center justify-center space-x-1 text-sm text-gray-500">
+                      <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                      <span>Payment money</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -136,40 +248,40 @@ const HomePage = () => {
       <div className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-navy-900 mb-4">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
               Why Choose SecureBank?
             </h2>
-            <p className="text-xl text-gray-600">
-              Professional banking services with cutting-edge security
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Professional banking services with cutting-edge security and modern technology
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-gold-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 hover:shadow-lg transition-all duration-200">
+              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-navy-900 mb-2">Secure Transactions</h3>
-              <p className="text-gray-600">All transactions are encrypted and require admin approval for maximum security.</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Secure Transactions</h3>
+              <p className="text-gray-600 leading-relaxed">All transactions are encrypted and require admin approval for maximum security.</p>
             </div>
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-gold-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-green-50 to-green-100 hover:shadow-lg transition-all duration-200">
+              <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-navy-900 mb-2">Instant Access</h3>
-              <p className="text-gray-600">Real-time balance updates and transaction history at your fingertips.</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Instant Access</h3>
+              <p className="text-gray-600 leading-relaxed">Real-time balance updates and transaction history at your fingertips.</p>
             </div>
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-gold-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 hover:shadow-lg transition-all duration-200">
+              <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-navy-900 mb-2">Trusted Platform</h3>
-              <p className="text-gray-600">Professional-grade banking with full compliance and audit trails.</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Trusted Platform</h3>
+              <p className="text-gray-600 leading-relaxed">Professional-grade banking with full compliance and audit trails.</p>
             </div>
           </div>
         </div>
