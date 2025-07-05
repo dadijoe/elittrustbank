@@ -28,8 +28,10 @@ const AuthProvider = ({ children }) => {
       const response = await axios.get(`${API}/dashboard`);
       setUser(response.data.user);
     } catch (error) {
+      console.error('Dashboard fetch error:', error);
       localStorage.removeItem('token');
       delete axios.defaults.headers.common['Authorization'];
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -42,8 +44,10 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem('token', access_token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
       setUser(user);
+      setLoading(false); // Ensure loading is set to false after successful login
       return { success: true };
     } catch (error) {
+      setLoading(false); // Ensure loading is set to false on login failure
       return { success: false, error: error.response?.data?.detail || 'Login failed' };
     }
   };
