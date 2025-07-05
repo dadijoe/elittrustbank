@@ -530,7 +530,7 @@ const LoginModal = ({ onClose }) => {
         </form>
         
         <div className="mt-4 text-center text-sm text-gray-600">
-          <p>Admin Login: admin@bank.com / admin123</p>
+          <p>Contact administrator for login credentials</p>
         </div>
       </div>
     </div>
