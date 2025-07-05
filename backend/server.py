@@ -155,7 +155,10 @@ async def signup(user_data: UserSignup):
     user_dict["hashed_password"] = hashed_password
     
     user = User(**user_dict)
-    await db.users.insert_one(user.dict())
+    user_dict = user.dict()
+    user_dict["hashed_password"] = hashed_password  # Ensure hashed_password is in the dict
+    
+    await db.users.insert_one(user_dict)
     
     return {"message": "Account created successfully. Please wait for admin approval."}
 
