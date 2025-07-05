@@ -923,7 +923,9 @@ const CustomerDashboard = ({ dashboard }) => {
 };
 
 const TransferForm = () => {
+  const { user } = React.useContext(AuthContext);
   const [formData, setFormData] = useState({
+    from_account_type: 'checking',
     to_user_id: '',
     to_account_info: '',
     amount: '',
@@ -941,6 +943,7 @@ const TransferForm = () => {
       await axios.post(`${API}/transfer`, formData);
       setSuccess(true);
       setFormData({
+        from_account_type: 'checking',
         to_user_id: '',
         to_account_info: '',
         amount: '',
@@ -980,6 +983,22 @@ const TransferForm = () => {
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Select Account</label>
+          <select
+            value={formData.from_account_type}
+            onChange={(e) => setFormData({...formData, from_account_type: e.target.value})}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
+          >
+            <option value="checking">
+              Checking Account (****1234) - ${user?.checking_balance?.toFixed(2) || '0.00'}
+            </option>
+            <option value="savings">
+              Savings Account (****5678) - ${user?.savings_balance?.toFixed(2) || '0.00'}
+            </option>
+          </select>
+        </div>
+
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Transfer Type</label>
           <select
             value={formData.transaction_type}
@@ -987,6 +1006,7 @@ const TransferForm = () => {
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
           >
             <option value="internal">Internal Transfer</option>
+            <option value="self">Transfer Between My Accounts</option>
             <option value="domestic">Domestic Transfer</option>
             <option value="international">International Transfer</option>
           </select>
@@ -1003,6 +1023,28 @@ const TransferForm = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
               placeholder="Enter recipient's user ID"
             />
+          </div>
+        ) : formData.transaction_type === 'self' ? (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">To Account</label>
+            <select
+              value={formData.to_account_info}
+              onChange={(e) => setFormData({...formData, to_account_info: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
+              required
+            >
+              <option value="">Select destination account</option>
+              {formData.from_account_type !== 'checking' && (
+                <option value="checking">
+                  Checking Account (****1234) - ${user?.checking_balance?.toFixed(2) || '0.00'}
+                </option>
+              )}
+              {formData.from_account_type !== 'savings' && (
+                <option value="savings">
+                  Savings Account (****5678) - ${user?.savings_balance?.toFixed(2) || '0.00'}
+                </option>
+              )}
+            </select>
           </div>
         ) : (
           <div>
