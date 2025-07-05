@@ -198,6 +198,11 @@ async def get_dashboard(current_user: User = Depends(get_current_user)):
         ]
     }).sort("created_at", -1).limit(10).to_list(10)
     
+    # Convert ObjectId to string
+    for transaction in transactions:
+        if '_id' in transaction:
+            transaction['_id'] = str(transaction['_id'])
+    
     return {
         "user": current_user.dict(),
         "recent_transactions": transactions
