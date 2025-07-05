@@ -1164,6 +1164,11 @@ const CreditDebitForm = ({ allUsers }) => {
         description: formData.description
       };
 
+      // Add custom date if provided
+      if (formData.backdate) {
+        requestData.custom_date = new Date(formData.backdate).toISOString();
+      }
+
       await axios.post(`${API}/admin/manual-transaction`, requestData);
       setSuccess(true);
       setFormData({
