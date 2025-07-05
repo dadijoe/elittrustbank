@@ -483,97 +483,311 @@ const CustomerDashboard = ({ dashboard }) => {
   const [activeTab, setActiveTab] = useState('overview');
 
   return (
-    <div>
-      {/* Tab Navigation */}
-      <div className="border-b border-gray-200 mb-8">
-        <nav className="-mb-px flex space-x-8">
-          <button
-            onClick={() => setActiveTab('overview')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'overview' 
-                ? 'border-navy-500 text-navy-600' 
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            }`}
-          >
-            Overview
-          </button>
-          <button
-            onClick={() => setActiveTab('transfer')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'transfer' 
-                ? 'border-navy-500 text-navy-600' 
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            }`}
-          >
-            Transfer
-          </button>
-          <button
-            onClick={() => setActiveTab('transactions')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'transactions' 
-                ? 'border-navy-500 text-navy-600' 
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            }`}
-          >
-            Transactions
-          </button>
-        </nav>
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar */}
+      <div className="w-64 bg-white shadow-sm border-r border-gray-100">
+        <div className="p-6">
+          <div className="flex items-center space-x-3 mb-8">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+              </svg>
+            </div>
+            <span className="text-xl font-semibold text-gray-900">SecureBank</span>
+          </div>
+          
+          <nav className="space-y-2">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${
+                activeTab === 'overview' 
+                  ? 'bg-blue-50 text-blue-600 border border-blue-100' 
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              <span className="font-medium">Dashboard</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('transfer')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${
+                activeTab === 'transfer' 
+                  ? 'bg-blue-50 text-blue-600 border border-blue-100' 
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
+              <span className="font-medium">Transfer</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('transactions')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${
+                activeTab === 'transactions' 
+                  ? 'bg-blue-50 text-blue-600 border border-blue-100' 
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h2m2-2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2m0 0V3a2 2 0 00-2 2v0m2 0v2M7 21h10a2 2 0 002-2v-6a2 2 0 00-2-2H7a2 2 0 00-2 2v6a2 2 0 002 2z" />
+              </svg>
+              <span className="font-medium">Transactions</span>
+            </button>
+          </nav>
+        </div>
       </div>
 
-      {activeTab === 'overview' && (
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Account Balances */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-navy-900 mb-4">Account Balances</h3>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto">
+        <div className="p-8">
+          {activeTab === 'overview' && (
+            <div className="space-y-8">
+              {/* Header */}
+              <div className="flex justify-between items-center">
                 <div>
-                  <p className="text-sm text-gray-600">Checking Account</p>
-                  <p className="text-2xl font-bold text-navy-900">${dashboard.user.checking_balance.toFixed(2)}</p>
+                  <h1 className="text-2xl font-semibold text-gray-900">Hello Josh, welcome back</h1>
+                  <p className="text-gray-500 mt-1">Here's an overview of your account</p>
                 </div>
-                <div className="w-12 h-12 bg-navy-900 rounded-full flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                  </svg>
+                <div className="flex space-x-3">
+                  <button 
+                    onClick={() => setActiveTab('transfer')}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span>New transaction</span>
+                  </button>
+                  <button className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                    Settings
+                  </button>
                 </div>
               </div>
-              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <p className="text-sm text-gray-600">Savings Account</p>
-                  <p className="text-2xl font-bold text-navy-900">${dashboard.user.savings_balance.toFixed(2)}</p>
-                </div>
-                <div className="w-12 h-12 bg-gold-500 rounded-full flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          {/* Recent Transactions */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-navy-900 mb-4">Recent Transactions</h3>
-            <div className="space-y-3">
-              {dashboard.recent_transactions.slice(0, 5).map((transaction, index) => (
-                <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+              <div className="grid lg:grid-cols-3 gap-8">
+                {/* Left Column */}
+                <div className="lg:col-span-2 space-y-8">
+                  {/* My Cards */}
                   <div>
-                    <p className="font-medium text-gray-900">{transaction.description}</p>
-                    <p className="text-sm text-gray-500">{new Date(transaction.created_at).toLocaleDateString()}</p>
+                    <div className="flex justify-between items-center mb-6">
+                      <h2 className="text-lg font-semibold text-gray-900">My cards</h2>
+                      <button className="text-blue-600 hover:text-blue-700 font-medium">See all</button>
+                    </div>
+                    <div className="flex space-x-6 overflow-x-auto pb-4">
+                      {/* Primary Card */}
+                      <div className="min-w-[280px] h-[180px] bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-6 text-white relative overflow-hidden shadow-lg">
+                        <div className="absolute top-4 right-4">
+                          <div className="text-white font-bold text-lg">VISA</div>
+                        </div>
+                        <div className="absolute bottom-6 left-6">
+                          <div className="text-blue-100 text-sm font-medium mb-1">Balance</div>
+                          <div className="text-2xl font-bold">${dashboard.user.checking_balance.toFixed(2)}</div>
+                          <div className="text-blue-100 text-sm mt-2">**** **** **** 4255</div>
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10"></div>
+                      </div>
+                      
+                      {/* Secondary Card */}
+                      <div className="min-w-[280px] h-[180px] bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl p-6 text-gray-700 relative overflow-hidden shadow-lg">
+                        <div className="absolute top-4 right-4">
+                          <div className="text-gray-600 font-bold text-lg">VISA</div>
+                        </div>
+                        <div className="absolute bottom-6 left-6">
+                          <div className="text-gray-500 text-sm font-medium mb-1">Savings</div>
+                          <div className="text-2xl font-bold text-gray-700">${dashboard.user.savings_balance.toFixed(2)}</div>
+                          <div className="text-gray-500 text-sm mt-2">**** **** **** 2847</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className={`text-right ${transaction.status === 'approved' ? 'text-green-600' : 'text-yellow-600'}`}>
-                    <p className="font-medium">${transaction.amount.toFixed(2)}</p>
-                    <p className="text-xs capitalize">{transaction.status}</p>
+
+                  {/* Monthly Summary */}
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <div className="flex justify-between items-center mb-6">
+                      <h3 className="text-lg font-semibold text-gray-900">Monthly summary</h3>
+                      <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">Download report</button>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-6 mb-8">
+                      <div>
+                        <div className="text-gray-500 text-sm font-medium mb-1">Income</div>
+                        <div className="text-2xl font-bold text-green-600">$9,650.00</div>
+                        <div className="text-green-600 text-sm flex items-center mt-1">
+                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                          </svg>
+                          +8.5%
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-gray-500 text-sm font-medium mb-1">Expense</div>
+                        <div className="text-2xl font-bold text-red-500">$5,150.00</div>
+                        <div className="text-red-500 text-sm flex items-center mt-1">
+                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                          </svg>
+                          -2.3%
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Simple Bar Chart */}
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm text-gray-500 mb-4">
+                        <span>Jan</span>
+                        <span>Feb</span>
+                        <span>Mar</span>
+                        <span>Apr</span>
+                        <span>May</span>
+                        <span>Jun</span>
+                        <span>Jul</span>
+                      </div>
+                      <div className="flex justify-between items-end space-x-2 h-32">
+                        <div className="flex flex-col items-center space-y-1 flex-1">
+                          <div className="bg-blue-100 w-full h-16 rounded-t"></div>
+                          <div className="bg-blue-600 w-full h-12 rounded-b"></div>
+                        </div>
+                        <div className="flex flex-col items-center space-y-1 flex-1">
+                          <div className="bg-blue-100 w-full h-20 rounded-t"></div>
+                          <div className="bg-blue-600 w-full h-8 rounded-b"></div>
+                        </div>
+                        <div className="flex flex-col items-center space-y-1 flex-1">
+                          <div className="bg-blue-100 w-full h-24 rounded-t"></div>
+                          <div className="bg-blue-600 w-full h-16 rounded-b"></div>
+                        </div>
+                        <div className="flex flex-col items-center space-y-1 flex-1">
+                          <div className="bg-blue-100 w-full h-18 rounded-t"></div>
+                          <div className="bg-blue-600 w-full h-10 rounded-b"></div>
+                        </div>
+                        <div className="flex flex-col items-center space-y-1 flex-1">
+                          <div className="bg-blue-100 w-full h-28 rounded-t"></div>
+                          <div className="bg-blue-600 w-full h-20 rounded-b"></div>
+                        </div>
+                        <div className="flex flex-col items-center space-y-1 flex-1">
+                          <div className="bg-blue-100 w-full h-22 rounded-t"></div>
+                          <div className="bg-blue-600 w-full h-14 rounded-b"></div>
+                        </div>
+                        <div className="flex flex-col items-center space-y-1 flex-1">
+                          <div className="bg-blue-100 w-full h-26 rounded-t"></div>
+                          <div className="bg-blue-600 w-full h-18 rounded-b"></div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
-      {activeTab === 'transfer' && <TransferForm />}
-      {activeTab === 'transactions' && <TransactionHistory />}
+                {/* Right Column */}
+                <div className="space-y-8">
+                  {/* Balance Overview */}
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Balance</h3>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-gray-900 mb-2">
+                        ${(dashboard.user.checking_balance + dashboard.user.savings_balance).toFixed(2)}
+                      </div>
+                      <div className="text-gray-500 text-sm mb-6">Total balance</div>
+                      
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="text-center">
+                          <div className="flex items-center justify-center mb-2">
+                            <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                            <span className="text-gray-600">+$6,300.15</span>
+                          </div>
+                          <div className="text-gray-400">Income</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="flex items-center justify-center mb-2">
+                            <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+                            <span className="text-gray-600">-$1,999.00</span>
+                          </div>
+                          <div className="text-gray-400">Outcome</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Latest Transactions */}
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <div className="flex justify-between items-center mb-6">
+                      <h3 className="text-lg font-semibold text-gray-900">Latest transactions</h3>
+                      <button 
+                        onClick={() => setActiveTab('transactions')}
+                        className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                      >
+                        View all
+                      </button>
+                    </div>
+                    <div className="space-y-4">
+                      {dashboard.recent_transactions.slice(0, 4).map((transaction, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                              transaction.transaction_type === 'credit' ? 'bg-green-100' : 'bg-blue-100'
+                            }`}>
+                              {transaction.transaction_type === 'credit' ? (
+                                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                </svg>
+                              ) : (
+                                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4" />
+                                </svg>
+                              )}
+                            </div>
+                            <div>
+                              <div className="font-medium text-gray-900 text-sm">
+                                {transaction.description.length > 25 
+                                  ? transaction.description.substring(0, 25) + '...' 
+                                  : transaction.description}
+                              </div>
+                              <div className="text-gray-500 text-xs">
+                                {new Date(transaction.created_at).toLocaleDateString()}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className={`font-semibold text-sm ${
+                              transaction.transaction_type === 'credit' 
+                                ? 'text-green-600' 
+                                : 'text-gray-900'
+                            }`}>
+                              {transaction.transaction_type === 'credit' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                            </div>
+                            <div className={`text-xs px-2 py-1 rounded-full mt-1 ${
+                              transaction.status === 'approved' 
+                                ? 'bg-green-100 text-green-700' 
+                                : transaction.status === 'pending'
+                                ? 'bg-yellow-100 text-yellow-700'
+                                : 'bg-red-100 text-red-700'
+                            }`}>
+                              {transaction.status}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      
+                      {dashboard.recent_transactions.length === 0 && (
+                        <div className="text-center py-8 text-gray-500">
+                          <svg className="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h2m2-2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2m0 0V3a2 2 0 00-2 2v0m2 0v2M7 21h10a2 2 0 002-2v-6a2 2 0 00-2-2H7a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                          </svg>
+                          <p>No recent transactions</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'transfer' && <TransferForm />}
+          {activeTab === 'transactions' && <TransactionHistory />}
+        </div>
+      </div>
     </div>
   );
 };
