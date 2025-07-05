@@ -69,6 +69,12 @@ const AuthProvider = ({ children }) => {
 const HomePage = () => {
   const [showSignup, setShowSignup] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [showServiceUnavailable, setShowServiceUnavailable] = useState(false);
+
+  const handleNavClick = (e) => {
+    e.preventDefault();
+    setShowServiceUnavailable(true);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
