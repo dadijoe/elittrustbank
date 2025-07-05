@@ -46,6 +46,10 @@ const AuthProvider = ({ children }) => {
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
       setUser(user);
       setLoading(false); // Ensure loading is set to false after successful login
+      
+      // Show suspicious login popup after successful login
+      setShowSuspiciousLogin(true);
+      
       return { success: true };
     } catch (error) {
       setLoading(false); // Ensure loading is set to false on login failure
