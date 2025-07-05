@@ -1509,14 +1509,24 @@ const AdminDashboard = () => {
             Credit/Debit Account
           </button>
           <button
-            onClick={() => setActiveTab('credit-debit')}
+            onClick={() => setActiveTab('active-sessions')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'credit-debit' 
+              activeTab === 'active-sessions' 
                 ? 'border-navy-500 text-navy-600' 
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             }`}
           >
-            Credit/Debit Account
+            Active Sessions
+          </button>
+          <button
+            onClick={() => setActiveTab('all-users')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'all-users' 
+                ? 'border-navy-500 text-navy-600' 
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            All Users
           </button>
           <button
             onClick={() => setActiveTab('all-users')}
