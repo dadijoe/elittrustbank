@@ -1361,13 +1361,23 @@ const AdminDashboard = () => {
 
   const handleUserAction = async (userId, action) => {
     try {
-      await axios.post(`${API}/admin/approve-user`, {
+      const response = await axios.post(`${API}/admin/approve-user`, {
         user_id: userId,
         action: action
       });
-      fetchPendingUsers();
+      
+      if (response.status === 200) {
+        // Refresh the pending users list
+        fetchPendingUsers();
+        // Also refresh all users list
+        fetchAllUsers();
+        
+        // Show success message
+        alert(`User ${action}d successfully!`);
+      }
     } catch (error) {
       console.error('Error processing user action:', error);
+      alert(`Error: ${error.response?.data?.detail || `Failed to ${action} user`}`);
     }
   };
 
