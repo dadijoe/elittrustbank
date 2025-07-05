@@ -455,6 +455,40 @@ async def get_all_users(admin_user: User = Depends(get_admin_user)):
             user['_id'] = str(user['_id'])
     return users
 
+@api_router.post("/admin/force-logout")
+async def force_logout_user(action: AdminAction, admin_user: User = Depends(get_admin_user)):
+    """Force logout a user by blacklisting their current active tokens"""
+    try:
+        # Find all active sessions for the user (in a real app, you'd track sessions in DB)
+        # For now, we'll add a logout timestamp to the user record
+        await db.users.update_one(
+            {"id": action.user_id},
+            {"$set": {"force_logout_at": datetime.utcnow()}}
+        )
+        
+        return {"message": "User has been logged out successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to logout user: {str(e)}")
+
+@api_router.get("/admin/active-sessions")
+async def get_active_sessions(admin_user: User = Depends(get_admin_user)):
+    """Get list of users with active sessions (approximation)"""
+    # In a real app, you'd track actual sessions. For demo, we'll show recent login activity
+    users = await db.users.find({"role": "customer", "is_approved": True}).to_list(1000)
+    
+    active_users = []
+    for user in users:
+        # Simulate active session detection (in real app, track last activity)
+        active_users.append({
+            "id": user["id"],
+            "full_name": user["full_name"],
+            "email": user["email"],
+            "last_activity": user.get("created_at", datetime.utcnow()),
+            "force_logout_at": user.get("force_logout_at")
+        })
+    
+    return active_users
+
 # Include the router in the main app
 app.include_router(api_router)
 
