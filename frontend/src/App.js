@@ -544,7 +544,7 @@ const CustomerDashboard = ({ dashboard }) => {
           </nav>
 
           {/* Logout Button */}
-          <div className="absolute bottom-6 left-6 right-6">
+          <div className="mt-auto">
             <button
               onClick={logout}
               className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors text-gray-600 hover:bg-red-50 hover:text-red-600"
