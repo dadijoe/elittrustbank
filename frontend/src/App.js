@@ -884,6 +884,16 @@ const AdminDashboard = () => {
             Pending Transactions ({pendingTransactions.length})
           </button>
           <button
+            onClick={() => setActiveTab('credit-debit')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'credit-debit' 
+                ? 'border-navy-500 text-navy-600' 
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            Credit/Debit Account
+          </button>
+          <button
             onClick={() => setActiveTab('all-users')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'all-users' 
