@@ -352,6 +352,10 @@ async def manual_transaction(action: AdminAction, admin_user: User = Depends(get
 @api_router.get("/admin/users")
 async def get_all_users(admin_user: User = Depends(get_admin_user)):
     users = await db.users.find().to_list(1000)
+    # Convert ObjectId to string
+    for user in users:
+        if '_id' in user:
+            user['_id'] = str(user['_id'])
     return users
 
 # Include the router in the main app
