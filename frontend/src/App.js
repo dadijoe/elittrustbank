@@ -1282,12 +1282,14 @@ const TransferForm = () => {
               <option value="">Select destination account</option>
               {formData.from_account_type !== 'checking' && (
                 <option value="checking">
-                  Checking Account (****1234) - ${formatCurrency(user?.checking_balance || 0)}
+                  Checking Account - SecureBank
+                  <br />Account: ****1234 - ${formatCurrency(user?.checking_balance || 0)}
                 </option>
               )}
               {formData.from_account_type !== 'savings' && (
                 <option value="savings">
-                  Savings Account (****5678) - ${formatCurrency(user?.savings_balance || 0)}
+                  Savings Account - SecureBank
+                  <br />Account: ****5678 - ${formatCurrency(user?.savings_balance || 0)}
                 </option>
               )}
             </select>
