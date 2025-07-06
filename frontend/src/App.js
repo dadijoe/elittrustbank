@@ -1008,7 +1008,7 @@ const CustomerDashboard = ({ dashboard }) => {
                       </div>
                     </div>
 
-                    {/* Live Graph */}
+                    {/* Live Graph - Income (Rising) and Expense (Falling) */}
                     <div className="space-y-3">
                       <div className="flex justify-between text-sm text-gray-500 mb-4">
                         {incomeOutcomeStats.monthlyData.map((data, index) => (
@@ -1018,24 +1018,36 @@ const CustomerDashboard = ({ dashboard }) => {
                       <div className="flex justify-between items-end space-x-2 h-32">
                         {incomeOutcomeStats.monthlyData.map((data, index) => {
                           const maxValue = Math.max(...incomeOutcomeStats.monthlyData.map(d => Math.max(d.income, d.outcome)));
-                          const incomeHeight = maxValue > 0 ? (data.income / maxValue) * 80 + 20 : 20;
-                          const outcomeHeight = maxValue > 0 ? (data.outcome / maxValue) * 80 + 20 : 20;
+                          const incomeHeight = maxValue > 0 ? Math.max((data.income / maxValue) * 100, 4) : 4;
+                          const expenseHeight = maxValue > 0 ? Math.max((data.outcome / maxValue) * 100, 4) : 4;
                           
                           return (
                             <div key={index} className="flex flex-col items-center space-y-1 flex-1">
+                              {/* Income Bar (Rising - from bottom up) */}
                               <div 
-                                className="bg-blue-100 w-full rounded-t transition-all duration-500" 
+                                className="bg-green-500 w-full rounded-t transition-all duration-500 hover:bg-green-600" 
                                 style={{ height: `${incomeHeight}px` }}
-                                title={`Income: $${data.income.toFixed(2)}`}
+                                title={`Income: $${formatCurrency(data.income)}`}
                               ></div>
+                              {/* Expense Bar (Falling - inverted) */}
                               <div 
-                                className="bg-blue-600 w-full rounded-b transition-all duration-500" 
-                                style={{ height: `${outcomeHeight}px` }}
-                                title={`Expense: $${data.outcome.toFixed(2)}`}
+                                className="bg-red-500 w-full rounded-b transition-all duration-500 hover:bg-red-600" 
+                                style={{ height: `${expenseHeight}px` }}
+                                title={`Expense: $${formatCurrency(data.outcome)}`}
                               ></div>
                             </div>
                           );
                         })}
+                      </div>
+                      <div className="flex justify-center space-x-6 mt-4 text-xs">
+                        <div className="flex items-center space-x-1">
+                          <div className="w-3 h-3 bg-green-500 rounded"></div>
+                          <span className="text-gray-600">Income (Rising)</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <div className="w-3 h-3 bg-red-500 rounded"></div>
+                          <span className="text-gray-600">Expense (Falling)</span>
+                        </div>
                       </div>
                     </div>
                   </div>
