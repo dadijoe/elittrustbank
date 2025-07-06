@@ -126,15 +126,20 @@ const HomePage = () => {
       <nav className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo */}
+            {/* ElitTrustBank Logo */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                </svg>
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-800 to-teal-600 rounded-lg flex items-center justify-center relative">
+                {/* Modern Banking Icon - Stylized "E" with gold accent */}
+                <div className="relative">
+                  <div className="w-4 h-4 border-2 border-white rounded-sm relative">
+                    <div className="absolute top-0 left-0 w-full h-0.5 bg-amber-400"></div>
+                    <div className="absolute top-1.5 left-0 w-2.5 h-0.5 bg-white"></div>
+                    <div className="absolute bottom-0 left-0 w-full h-0.5 bg-amber-400"></div>
+                  </div>
+                </div>
               </div>
               <span className="text-xl font-bold text-gray-900">ElitTrustBank</span>
-              <span className="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded font-medium">2.0</span>
+              <span className="text-xs bg-gradient-to-r from-blue-100 to-teal-100 text-blue-800 px-2 py-0.5 rounded font-medium">Elite</span>
             </div>
 
             {/* Navigation Links */}
