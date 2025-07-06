@@ -57,8 +57,8 @@ class User(BaseModel):
     role: str = "customer"  # customer or admin
     is_approved: bool = False
     created_at: datetime = Field(default_factory=datetime.utcnow)
-    checking_balance: float = 0.0
-    savings_balance: float = 0.0
+    checking_balance: float = 0.00
+    savings_balance: float = 0.00
     account_frozen: bool = False
 
 class UserSignup(BaseModel):
