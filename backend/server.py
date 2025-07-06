@@ -231,6 +231,10 @@ async def get_dashboard(current_user: User = Depends(get_current_user)):
     if not fresh_user:
         raise HTTPException(status_code=404, detail="User not found")
     
+    # Convert ObjectId to string
+    if '_id' in fresh_user:
+        fresh_user['_id'] = str(fresh_user['_id'])
+    
     # Get recent transactions
     transactions = await db.transactions.find({
         "$or": [
