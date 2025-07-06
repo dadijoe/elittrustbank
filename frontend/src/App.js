@@ -1195,7 +1195,10 @@ const TransferForm = () => {
         to_account_info: '',
         amount: '',
         transaction_type: 'internal',
-        description: ''
+        description: '',
+        recipient_account_number: '',
+        bank_name: '',
+        recipient_full_name: ''
       });
     } catch (error) {
       setError(error.response?.data?.detail || 'Transfer failed');
