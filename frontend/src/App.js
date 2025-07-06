@@ -1285,7 +1285,7 @@ const TransferForm = () => {
               )}
               {formData.from_account_type !== 'savings' && (
                 <option value="savings">
-                  Savings Account (****5678) - ${user?.savings_balance?.toFixed(2) || '0.00'}
+                  Savings Account (****5678) - ${formatCurrency(user?.savings_balance || 0)}
                 </option>
               )}
             </select>
