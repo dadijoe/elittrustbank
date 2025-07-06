@@ -1237,7 +1237,7 @@ const TransferForm = () => {
               Checking Account (****1234) - ${formatCurrency(user?.checking_balance || 0)}
             </option>
             <option value="savings">
-              Savings Account (****5678) - ${user?.savings_balance?.toFixed(2) || '0.00'}
+              Savings Account (****5678) - ${formatCurrency(user?.savings_balance || 0)}
             </option>
           </select>
         </div>
