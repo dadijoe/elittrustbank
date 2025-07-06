@@ -1291,7 +1291,7 @@ const TransferForm = () => {
               )}
               {formData.from_account_type !== 'savings' && (
                 <option value="savings">
-                  Savings Account - SecureBank - ****5678 - ${formatCurrency(user?.savings_balance || 0)}
+                  Savings Account - ElitTrustBank - ****5678 - ${formatCurrency(user?.savings_balance || 0)}
                 </option>
               )}
             </select>
