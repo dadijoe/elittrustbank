@@ -1167,18 +1167,18 @@ const TransferForm = () => {
 
   if (success) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="text-center">
           <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-navy-900 mb-2">Transfer Submitted!</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Transfer Submitted!</h3>
           <p className="text-gray-600 mb-4">Your transfer has been submitted and is waiting for admin approval.</p>
           <button
             onClick={() => setSuccess(false)}
-            className="bg-navy-900 text-white px-6 py-2 rounded-lg hover:bg-navy-800 transition-colors"
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
             New Transfer
           </button>
@@ -1188,8 +1188,8 @@ const TransferForm = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-semibold text-navy-900 mb-6">New Transfer</h3>
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-6">New Transfer</h3>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
