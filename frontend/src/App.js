@@ -1243,7 +1243,7 @@ const TransferForm = () => {
               Checking Account - ElitTrustBank - ****1234 - ${formatCurrency(user?.checking_balance || 0)}
             </option>
             <option value="savings">
-              Savings Account - SecureBank - ****5678 - ${formatCurrency(user?.savings_balance || 0)}
+              Savings Account - ElitTrustBank - ****5678 - ${formatCurrency(user?.savings_balance || 0)}
             </option>
           </select>
         </div>
