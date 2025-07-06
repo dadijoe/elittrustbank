@@ -114,7 +114,7 @@ class AdminAction(BaseModel):
 def format_monetary_value(value):
     """Format monetary values to always have 2 decimal places"""
     if isinstance(value, (int, float)):
-        return float(f"{value:.2f}")
+        return f"{float(value):.2f}"
     return value
 
 def verify_password(plain_password, hashed_password):
