@@ -369,14 +369,17 @@ async def process_transaction(transaction_id: str, action: str, admin_user: User
         from_account_field = f"{transaction.get('from_account_type', 'checking')}_balance"
         from_balance = from_user.get(from_account_field, 0)
         
+        # Format amount to ensure 2 decimal places
+        amount = format_monetary_value(transaction["amount"])
+        
         # Check if sender has sufficient funds in the specified account
-        if from_balance < transaction["amount"]:
+        if from_balance < amount:
             raise HTTPException(status_code=400, detail=f"Insufficient funds in {transaction.get('from_account_type', 'checking')} account")
         
         # Deduct from sender's specified account
         await db.users.update_one(
             {"id": transaction["from_user_id"]},
-            {"$inc": {from_account_field: -transaction["amount"]}}
+            {"$inc": {from_account_field: -amount}}
         )
         
         # Handle different transaction types
@@ -386,14 +389,14 @@ async def process_transaction(transaction_id: str, action: str, admin_user: User
             if to_user:
                 await db.users.update_one(
                     {"id": transaction["to_user_id"]},
-                    {"$inc": {"checking_balance": transaction["amount"]}}
+                    {"$inc": {"checking_balance": amount}}
                 )
         elif transaction["transaction_type"] == "self":
             # Self transfer between user's own accounts
             to_account_field = f"{transaction['to_account_info']}_balance"
             await db.users.update_one(
                 {"id": transaction["from_user_id"]},
-                {"$inc": {to_account_field: transaction["amount"]}}
+                {"$inc": {to_account_field: amount}}
             )
         
         # For domestic and international transfers, money goes out of the system
