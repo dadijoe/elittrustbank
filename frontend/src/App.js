@@ -1128,7 +1128,7 @@ const CustomerDashboard = ({ dashboard }) => {
                                 ? 'text-green-600' 
                                 : 'text-gray-900'
                             }`}>
-                              {transaction.transaction_type === 'credit' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                              {transaction.transaction_type === 'credit' ? '+' : '-'}${formatCurrency(transaction.amount)}
                             </div>
                             <div className={`text-xs px-2 py-1 rounded-full mt-1 ${
                               transaction.status === 'approved' 
