@@ -1406,7 +1406,7 @@ const TransactionHistory = () => {
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-lg font-bold text-navy-900">${transaction.amount.toFixed(2)}</p>
+                <p className="text-lg font-bold text-navy-900">${formatCurrency(transaction.amount)}</p>
                 <p className="text-sm text-gray-500">ID: {transaction.id.slice(0, 8)}</p>
               </div>
             </div>
