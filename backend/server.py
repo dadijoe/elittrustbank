@@ -332,10 +332,11 @@ async def get_pending_users(admin_user: User = Depends(get_admin_user)):
 @api_router.get("/admin/pending-transactions")
 async def get_pending_transactions(admin_user: User = Depends(get_admin_user)):
     transactions = await db.transactions.find({"status": "pending"}).to_list(100)
-    # Convert ObjectId to string
+    # Convert ObjectId to string and format monetary values
     for transaction in transactions:
         if '_id' in transaction:
             transaction['_id'] = str(transaction['_id'])
+        transaction['amount'] = format_monetary_value(transaction.get('amount', 0))
     return transactions
 
 @api_router.post("/admin/approve-user")
