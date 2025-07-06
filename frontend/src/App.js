@@ -1287,7 +1287,6 @@ const TransferForm = () => {
               {formData.from_account_type !== 'checking' && (
                 <option value="checking">
                   Checking Account - ElitTrustBank - ****1234 - ${formatCurrency(user?.checking_balance || 0)}
-                  Checking Account - SecureBank - ****1234 - ${formatCurrency(user?.checking_balance || 0)}
                 </option>
               )}
               {formData.from_account_type !== 'savings' && (
