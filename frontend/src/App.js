@@ -893,7 +893,7 @@ const CustomerDashboard = ({ dashboard }) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile Header */}
-        <div className="lg:hidden bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
+        <div className="lg:hidden bg-white border-b border-gray-100 px-3 sm:px-4 py-3 flex items-center justify-between sticky top-0 z-40">
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
@@ -910,7 +910,14 @@ const CustomerDashboard = ({ dashboard }) => {
             </div>
             <span className="text-lg font-semibold text-gray-900">SecureBank</span>
           </div>
-          <div className="w-9"></div> {/* Spacer for centering */}
+          
+          {/* Mobile Balance Display */}
+          <div className="text-right">
+            <div className="text-xs text-gray-500">Total</div>
+            <div className="text-sm font-bold text-gray-900">
+              ${formatCurrency((liveData?.user?.checking_balance || 0) + (liveData?.user?.savings_balance || 0))}
+            </div>
+          </div>
         </div>
 
         <div className="flex-1 overflow-auto p-4 lg:p-8">
