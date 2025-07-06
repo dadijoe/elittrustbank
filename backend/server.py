@@ -429,18 +429,21 @@ async def manual_transaction(action: AdminAction, admin_user: User = Depends(get
             # If parsing fails, use current time as fallback
             transaction_date = datetime.utcnow()
     
+    # Format amount to ensure 2 decimal places
+    amount = format_monetary_value(action.amount)
+    
     if action.action == "credit":
         field = f"{action.account_type}_balance"
         await db.users.update_one(
             {"id": action.user_id},
-            {"$inc": {field: action.amount}}
+            {"$inc": {field: amount}}
         )
         
         # Create transaction record with custom date
         transaction = Transaction(
             from_user_id="system",
             to_user_id=action.user_id,
-            amount=action.amount,
+            amount=amount,
             transaction_type="credit",
             description=action.description or "Manual credit",
             status="approved",
@@ -455,14 +458,14 @@ async def manual_transaction(action: AdminAction, admin_user: User = Depends(get
         field = f"{action.account_type}_balance"
         await db.users.update_one(
             {"id": action.user_id},
-            {"$inc": {field: -action.amount}}
+            {"$inc": {field: -amount}}
         )
         
         # Create transaction record with custom date
         transaction = Transaction(
             from_user_id=action.user_id,
             to_user_id="system",
-            amount=action.amount,
+            amount=amount,
             transaction_type="debit",
             description=action.description or "Manual debit",
             status="approved",
