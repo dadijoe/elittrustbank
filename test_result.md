@@ -118,6 +118,9 @@ backend:
         comment: "Backend already properly returns numeric data that can be formatted on frontend"
       - working: true
         agent: "testing"
+        comment: "Backend testing completed successfully. Added format_monetary_value helper function and ensured all financial values use proper decimal formatting"
+      - working: true
+        agent: "testing"
         comment: "Fixed number formatting in backend API responses to consistently use 2 decimal places for all monetary values. Added format_monetary_value helper function."
 
   - task: "Monthly summary transaction logic"
