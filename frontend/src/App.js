@@ -108,46 +108,68 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       {/* Modern Header */}
-      <nav className="bg-white/95 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+      <nav className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+          <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                 </svg>
               </div>
-              <span className="text-2xl font-bold text-gray-900">SecureBank</span>
-              <span className="text-sm bg-blue-100 text-blue-600 px-2 py-1 rounded-full font-medium">2.0</span>
+              <span className="text-xl font-bold text-gray-900">SecureBank</span>
+              <span className="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded font-medium">2.0</span>
             </div>
 
             {/* Navigation Links */}
-            <div className="hidden md:flex items-center space-x-6">
-              <a href="#personal" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Personal</a>
-              <a href="#small-business" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Small Business</a>
-              <a href="#business" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Businesses & Institutions</a>
-              <a href="#security" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Security</a>
-              <a href="#about" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">About Us</a>
-              <a href="#contact" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Contact us</a>
+            <div className="hidden lg:flex items-center space-x-8">
+              <a href="#personal" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium transition-colors">Personal</a>
+              <a href="#small-business" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium transition-colors">Small Business</a>
+              <a href="#business" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium transition-colors">Businesses & Institutions</a>
+              <a href="#security" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium transition-colors">Security</a>
+              <a href="#about" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium transition-colors">About Us</a>
+              <a href="#contact" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium transition-colors">Contact us</a>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
               <button
                 onClick={() => setShowLogin(true)}
-                className="hidden md:block text-gray-600 hover:text-gray-900 font-medium transition-colors"
+                className="hidden sm:block text-sm text-gray-700 hover:text-blue-600 font-medium transition-colors"
               >
                 Log In
               </button>
               <button
                 onClick={() => setShowSignup(true)}
-                className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all duration-200 flex items-center space-x-2 shadow-lg hover:shadow-xl"
+                className="bg-blue-600 text-white px-4 py-2 text-sm rounded-lg font-medium hover:bg-blue-700 transition-colors"
               >
-                <span>Open Account</span>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                Open Account
+              </button>
+              
+              {/* Mobile menu button */}
+              <button className="lg:hidden p-2 text-gray-600 hover:text-gray-900">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
+              </button>
+            </div>
+          </div>
+          
+          {/* Mobile Navigation */}
+          <div className="lg:hidden border-t border-gray-100 py-4 hidden">
+            <div className="flex flex-col space-y-3">
+              <a href="#personal" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium">Personal</a>
+              <a href="#small-business" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium">Small Business</a>
+              <a href="#business" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium">Businesses & Institutions</a>
+              <a href="#security" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium">Security</a>
+              <a href="#about" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium">About Us</a>
+              <a href="#contact" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium">Contact us</a>
+              <button
+                onClick={() => setShowLogin(true)}
+                className="sm:hidden text-left text-sm text-gray-700 hover:text-blue-600 font-medium"
+              >
+                Log In
               </button>
             </div>
           </div>
