@@ -56,7 +56,29 @@ class BankAPITester:
         print(f"\n🔍 Validating number formatting in {endpoint_name} response...")
         
         def check_number_format(value, path):
-            if isinstance(value, (int, float)):
+            # Handle string values that represent numbers
+            if isinstance(value, str):
+                try:
+                    # Check if it's a numeric string
+                    float_value = float(value)
+                    # Check if it has exactly 2 decimal places
+                    if '.' in value:
+                        decimal_places = len(value.split('.')[1])
+                        if decimal_places != 2:
+                            self.number_format_issues.append({
+                                'endpoint': endpoint_name,
+                                'path': path,
+                                'value': value,
+                                'issue': f"Expected 2 decimal places, got {decimal_places}"
+                            })
+                            return False
+                    return True
+                except ValueError:
+                    # Not a numeric string
+                    return True
+            
+            # Handle numeric values
+            elif isinstance(value, (int, float)):
                 # Check if monetary value (assuming values >= 1 or <= -1 are monetary)
                 if abs(value) >= 1 or value == 0:
                     # For monetary values, check decimal precision
