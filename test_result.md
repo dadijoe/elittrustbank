@@ -116,6 +116,45 @@ backend:
       - working: true
         agent: "main"
         comment: "Backend already properly returns numeric data that can be formatted on frontend"
+      - working: true
+        agent: "testing"
+        comment: "Fixed number formatting in backend API responses to consistently use 2 decimal places for all monetary values. Added format_monetary_value helper function."
+
+  - task: "Monthly summary transaction logic"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Verified that credits increase account balances and debits decrease account balances. Monthly summary calculations are correct."
+
+  - task: "Transfer functionality"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Tested all transfer types (internal, self, domestic, international) and verified proper account balance handling."
+
+  - task: "Admin manual transactions"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Tested credit/debit functionality with custom dates. Fixed issue with string vs float values in database operations."
 
 frontend:
   - task: "Number formatting implementation"
@@ -185,3 +224,5 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "Starting implementation of number formatting consistency, transfer form enhancements, and verification of monthly graph and responsive header"
+  - agent: "testing"
+    message: "Completed backend testing. Fixed issues with number formatting in API responses and database operations. All backend functionality is working correctly: number formatting, monthly summary logic, transfer functionality, and admin manual transactions with custom dates."
