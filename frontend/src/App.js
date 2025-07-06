@@ -975,7 +975,7 @@ const CustomerDashboard = ({ dashboard }) => {
                         </div>
                         <div className="absolute bottom-6 left-6">
                           <div className="text-gray-500 text-sm font-medium mb-1">Savings</div>
-                          <div className="text-2xl font-bold text-gray-700">${liveData?.user?.savings_balance?.toFixed(2) || '0.00'}</div>
+                          <div className="text-2xl font-bold text-gray-700">${formatCurrency(liveData?.user?.savings_balance || 0)}</div>
                           <div className="text-gray-500 text-sm mt-2">**** **** **** 2847</div>
                         </div>
                       </div>
