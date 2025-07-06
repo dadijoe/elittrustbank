@@ -1309,6 +1309,43 @@ const TransferForm = () => {
           </div>
         )}
 
+        {/* New recipient information fields */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Recipient Account Number</label>
+          <input
+            type="text"
+            required
+            value={formData.recipient_account_number}
+            onChange={(e) => setFormData({...formData, recipient_account_number: e.target.value})}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
+            placeholder="Enter recipient account number"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Bank Name</label>
+          <input
+            type="text"
+            required
+            value={formData.bank_name}
+            onChange={(e) => setFormData({...formData, bank_name: e.target.value})}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
+            placeholder="Enter bank name"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Recipient Full Name</label>
+          <input
+            type="text"
+            required
+            value={formData.recipient_full_name}
+            onChange={(e) => setFormData({...formData, recipient_full_name: e.target.value})}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
+            placeholder="Enter recipient full name"
+          />
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Amount</label>
           <div className="relative">
