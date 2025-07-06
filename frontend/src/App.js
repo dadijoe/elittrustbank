@@ -1068,7 +1068,7 @@ const CustomerDashboard = ({ dashboard }) => {
                         <div className="text-center">
                           <div className="flex items-center justify-center mb-2">
                             <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                            <span className="text-gray-600">+${incomeOutcomeStats.income.toFixed(2)}</span>
+                            <span className="text-gray-600">+${formatCurrency(incomeOutcomeStats.income)}</span>
                           </div>
                           <div className="text-gray-400">Income</div>
                         </div>
