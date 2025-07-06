@@ -1304,7 +1304,7 @@ const TransferForm = () => {
 
         <button
           type="submit"
-          className="w-full bg-navy-900 text-white py-2 rounded-lg hover:bg-navy-800 transition-colors"
+          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
         >
           Submit Transfer
         </button>
