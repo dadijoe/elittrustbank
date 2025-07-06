@@ -223,6 +223,129 @@ class BankAPITester:
             token=self.customer_token
         )
         return success
+        
+    def test_transfer_types(self):
+        """Test all transfer types (internal, self, domestic, international)"""
+        if not self.customer_token or not self.admin_token:
+            print("❌ Customer or admin token not available, skipping test")
+            return False
+            
+        # First, add funds to the customer account
+        print("\n🔍 Adding funds to customer account for transfer tests...")
+        success, response = self.run_test(
+            "Add Funds to Customer",
+            "POST",
+            "admin/manual-transaction",
+            200,
+            data={
+                "user_id": self.customer_id,
+                "action": "credit",
+                "amount": 5000.00,
+                "account_type": "checking",
+                "description": "Adding funds for transfer tests"
+            },
+            token=self.admin_token
+        )
+        
+        if not success:
+            print("❌ Failed to add funds to customer account")
+            return False
+            
+        # Test internal transfer
+        print("\n🔍 Testing internal transfer...")
+        success1, response1 = self.run_test(
+            "Internal Transfer",
+            "POST",
+            "transfer",
+            200,
+            data={
+                "amount": 100.00,
+                "transaction_type": "internal",
+                "description": "Test internal transfer",
+                "to_user_id": "system"  # Using system as recipient for testing
+            },
+            token=self.customer_token
+        )
+        
+        # Test self transfer (between checking and savings)
+        print("\n🔍 Testing self transfer...")
+        success2, response2 = self.run_test(
+            "Self Transfer",
+            "POST",
+            "transfer",
+            200,
+            data={
+                "amount": 200.00,
+                "transaction_type": "self",
+                "description": "Test self transfer",
+                "from_account_type": "checking",
+                "to_account_info": "savings"
+            },
+            token=self.customer_token
+        )
+        
+        # Test domestic transfer
+        print("\n🔍 Testing domestic transfer...")
+        success3, response3 = self.run_test(
+            "Domestic Transfer",
+            "POST",
+            "transfer",
+            200,
+            data={
+                "amount": 300.00,
+                "transaction_type": "domestic",
+                "description": "Test domestic transfer",
+                "to_account_info": "Bank of America - Account #1234567890"
+            },
+            token=self.customer_token
+        )
+        
+        # Test international transfer
+        print("\n🔍 Testing international transfer...")
+        success4, response4 = self.run_test(
+            "International Transfer",
+            "POST",
+            "transfer",
+            200,
+            data={
+                "amount": 400.00,
+                "transaction_type": "international",
+                "description": "Test international transfer",
+                "to_account_info": "Deutsche Bank - IBAN: DE89370400440532013000"
+            },
+            token=self.customer_token
+        )
+        
+        # Get pending transactions to verify all transfers were created
+        print("\n🔍 Verifying all transfers were created...")
+        success5, transactions = self.run_test(
+            "Get Pending Transactions",
+            "GET",
+            "admin/pending-transactions",
+            200,
+            token=self.admin_token
+        )
+        
+        if success5:
+            # Count our test transfers
+            test_transfers = [t for t in transactions if t.get('from_user_id') == self.customer_id]
+            print(f"Found {len(test_transfers)} pending transfers from test customer")
+            
+            # Verify each transfer type exists
+            transfer_types = [t.get('transaction_type') for t in test_transfers]
+            print(f"Transfer types found: {transfer_types}")
+            
+            all_types_found = all(t in transfer_types for t in ['internal', 'self', 'domestic', 'international'])
+            if all_types_found:
+                print("✅ All transfer types were created successfully")
+            else:
+                print("❌ Not all transfer types were found in pending transactions")
+                return False
+        else:
+            print("❌ Failed to get pending transactions")
+            return False
+            
+        return success1 and success2 and success3 and success4 and success5
 
     def test_get_pending_transactions(self):
         """Test getting pending transactions as admin"""
