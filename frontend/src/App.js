@@ -1524,7 +1524,7 @@ const CreditDebitForm = ({ allUsers }) => {
               <option value="">Select account</option>
               {allUsers.filter(user => user.role !== 'admin').map((user) => (
                 <option key={user.id} value={user.id}>
-                  {user.full_name} ({user.email}) - Checking: ${user.checking_balance.toFixed(2)}, Savings: ${user.savings_balance.toFixed(2)}
+                  {user.full_name} ({user.email}) - Checking: ${formatCurrency(user.checking_balance)}, Savings: ${formatCurrency(user.savings_balance)}
                 </option>
               ))}
             </select>
