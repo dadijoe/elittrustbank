@@ -50,6 +50,51 @@ class BankAPITester:
         except Exception as e:
             print(f"❌ Failed - Error: {str(e)}")
             return False, {}
+            
+    def validate_number_formatting(self, response_data, endpoint_name):
+        """Validate number formatting in API responses"""
+        print(f"\n🔍 Validating number formatting in {endpoint_name} response...")
+        
+        def check_number_format(value, path):
+            if isinstance(value, (int, float)):
+                # Check if monetary value (assuming values >= 1 or <= -1 are monetary)
+                if abs(value) >= 1 or value == 0:
+                    # For monetary values, check decimal precision
+                    str_value = str(value)
+                    if '.' in str_value:
+                        decimal_places = len(str_value.split('.')[1])
+                        if decimal_places != 2:
+                            self.number_format_issues.append({
+                                'endpoint': endpoint_name,
+                                'path': path,
+                                'value': value,
+                                'issue': f"Expected 2 decimal places, got {decimal_places}"
+                            })
+                            return False
+            return True
+        
+        def recursive_check(data, current_path=""):
+            if isinstance(data, dict):
+                for key, value in data.items():
+                    new_path = f"{current_path}.{key}" if current_path else key
+                    if key in ['amount', 'balance', 'checking_balance', 'savings_balance'] or 'balance' in key or 'amount' in key:
+                        check_number_format(value, new_path)
+                    recursive_check(value, new_path)
+            elif isinstance(data, list):
+                for i, item in enumerate(data):
+                    new_path = f"{current_path}[{i}]"
+                    recursive_check(item, new_path)
+        
+        recursive_check(response_data)
+        
+        if not self.number_format_issues:
+            print(f"✅ Number formatting validation passed for {endpoint_name}")
+            return True
+        else:
+            print(f"❌ Found {len(self.number_format_issues)} number formatting issues in {endpoint_name}")
+            for issue in self.number_format_issues:
+                print(f"  - {issue['path']}: {issue['value']} - {issue['issue']}")
+            return False
 
     def test_admin_login(self):
         """Test admin login"""
