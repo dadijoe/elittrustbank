@@ -380,7 +380,7 @@ class BankAPITester:
 
 if __name__ == "__main__":
     # Use the public endpoint from the frontend .env file
-    backend_url = "https://4d7018b7-5a0c-4fa2-a488-2cc75af693d2.preview.emergentagent.com"
+    backend_url = "https://fd0f97d2-1638-4ac9-9947-f34eb9420097.preview.emergentagent.com"
     
     # Check if we're running the specific transaction approval test
     if len(sys.argv) > 1 and sys.argv[1] == "test_transaction_approval":
