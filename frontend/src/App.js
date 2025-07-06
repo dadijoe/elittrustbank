@@ -5,6 +5,21 @@ import axios from 'axios';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
+// Number formatting utility
+const formatCurrency = (amount) => {
+  const num = parseFloat(amount) || 0;
+  return new Intl.NumberFormat('en-US', {
+    style: 'decimal',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(num);
+};
+
+const formatNumber = (number) => {
+  const num = parseFloat(number) || 0;
+  return new Intl.NumberFormat('en-US').format(num);
+};
+
 // Auth Context
 const AuthContext = React.createContext();
 
