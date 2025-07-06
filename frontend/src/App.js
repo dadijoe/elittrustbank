@@ -1241,7 +1241,6 @@ const TransferForm = () => {
           >
             <option value="checking">
               Checking Account - ElitTrustBank - ****1234 - ${formatCurrency(user?.checking_balance || 0)}
-              Checking Account - SecureBank - ****1234 - ${formatCurrency(user?.checking_balance || 0)}
             </option>
             <option value="savings">
               Savings Account - SecureBank - ****5678 - ${formatCurrency(user?.savings_balance || 0)}
