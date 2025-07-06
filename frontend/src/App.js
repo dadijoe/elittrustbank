@@ -126,13 +126,10 @@ const HomePage = () => {
             <div className="hidden md:flex items-center space-x-6">
               <a href="#personal" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Personal</a>
               <a href="#small-business" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Small Business</a>
-              <a href="#wealth" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Wealth Management</a>
               <a href="#business" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Businesses & Institutions</a>
               <a href="#security" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Security</a>
               <a href="#about" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">About Us</a>
-              <a href="#espanol" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">En español</a>
               <a href="#contact" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Contact us</a>
-              <a href="#help" onClick={handleNavClick} className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Help</a>
             </div>
 
             {/* CTA Buttons */}
