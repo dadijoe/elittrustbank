@@ -524,7 +524,24 @@ class BankAPITester:
             print("❌ Admin or customer token not available, skipping test")
             return False
             
-        # First, add funds to the customer account
+        # First, get current balance to use as baseline
+        print("\n🔍 Getting current balance as baseline...")
+        success0, dashboard = self.run_test(
+            "Get Initial Dashboard",
+            "GET",
+            "dashboard",
+            200,
+            token=self.customer_token
+        )
+        
+        if not success0:
+            print("❌ Failed to get initial dashboard")
+            return False
+            
+        initial_balance = float(dashboard.get('user', {}).get('checking_balance', 0))
+        print(f"Initial checking balance: ${initial_balance}")
+        
+        # Add funds to the customer account for monthly summary test
         print("\n🔍 Adding funds to customer account for monthly summary test...")
         success1, response1 = self.run_test(
             "Add Initial Funds",
@@ -548,8 +565,14 @@ class BankAPITester:
         # Create transactions for the current month
         current_month = datetime.utcnow().strftime("%Y-%m")
         
+        # Track total credits and debits for verification
+        total_credits = 0
+        total_debits = 0
+        
         # Add credits with different dates in current month
         for i, day in enumerate([5, 10, 15, 20]):
+            amount = 500.00 * (i+1)
+            total_credits += amount
             date_str = f"{current_month}-{day:02d}T12:00:00"
             success, response = self.run_test(
                 f"Add Credit Transaction {i+1}",
@@ -559,7 +582,7 @@ class BankAPITester:
                 data={
                     "user_id": self.customer_id,
                     "action": "credit",
-                    "amount": 500.00 * (i+1),
+                    "amount": amount,
                     "account_type": "checking",
                     "description": f"Monthly test credit {i+1}",
                     "custom_date": date_str
@@ -572,6 +595,8 @@ class BankAPITester:
         
         # Add debits with different dates in current month
         for i, day in enumerate([8, 12, 18, 25]):
+            amount = 300.00 * (i+1)
+            total_debits += amount
             date_str = f"{current_month}-{day:02d}T12:00:00"
             success, response = self.run_test(
                 f"Add Debit Transaction {i+1}",
@@ -581,7 +606,7 @@ class BankAPITester:
                 data={
                     "user_id": self.customer_id,
                     "action": "debit",
-                    "amount": 300.00 * (i+1),
+                    "amount": amount,
                     "account_type": "checking",
                     "description": f"Monthly test debit {i+1}",
                     "custom_date": date_str
@@ -621,7 +646,7 @@ class BankAPITester:
                     if month not in monthly_transactions:
                         monthly_transactions[month] = {'credits': 0, 'debits': 0}
                     
-                    amount = transaction.get('amount', 0)
+                    amount = float(transaction.get('amount', 0))
                     
                     if 'credit' in transaction.get('description', '').lower() or transaction.get('transaction_type') == 'credit':
                         monthly_transactions[month]['credits'] += amount
@@ -637,11 +662,8 @@ class BankAPITester:
             print(f"  Net: ${data['credits'] - data['debits']:.2f}")
             
             # Verify credits and debits are calculated correctly
-            expected_credits = 500.00 * (1 + 2 + 3 + 4)  # Sum of all credit transactions
-            expected_debits = 300.00 * (1 + 2 + 3 + 4)   # Sum of all debit transactions
-            
-            credits_match = abs(data['credits'] - expected_credits) < 0.01
-            debits_match = abs(data['debits'] - expected_debits) < 0.01
+            credits_match = abs(data['credits'] - total_credits) < 0.01
+            debits_match = abs(data['debits'] - total_debits) < 0.01
             
             if credits_match and debits_match:
                 print("✅ Monthly summary calculations are correct")
@@ -654,16 +676,16 @@ class BankAPITester:
                 })
             else:
                 print("❌ Monthly summary calculations are incorrect")
-                print(f"  Expected credits: ${expected_credits:.2f}, got: ${data['credits']:.2f}")
-                print(f"  Expected debits: ${expected_debits:.2f}, got: ${data['debits']:.2f}")
+                print(f"  Expected credits: ${total_credits:.2f}, got: ${data['credits']:.2f}")
+                print(f"  Expected debits: ${total_debits:.2f}, got: ${data['debits']:.2f}")
                 self.transaction_test_results.append({
                     'month': month,
                     'credits': data['credits'],
                     'debits': data['debits'],
                     'net': data['credits'] - data['debits'],
                     'status': 'incorrect',
-                    'expected_credits': expected_credits,
-                    'expected_debits': expected_debits
+                    'expected_credits': total_credits,
+                    'expected_debits': total_debits
                 })
                 return False
         
@@ -679,14 +701,14 @@ class BankAPITester:
         
         if success3:
             user = dashboard.get('user', {})
-            checking_balance = user.get('checking_balance', 0)
+            checking_balance = float(user.get('checking_balance', 0))
             
             print(f"Final checking balance: ${checking_balance}")
             
             # Calculate expected balance
-            expected_balance = 10000.00  # Initial funds
-            expected_balance += 500.00 * (1 + 2 + 3 + 4)  # Credits
-            expected_balance -= 300.00 * (1 + 2 + 3 + 4)  # Debits
+            expected_balance = initial_balance + 10000.00  # Initial funds
+            expected_balance += total_credits  # Credits
+            expected_balance -= total_debits  # Debits
             
             balance_match = abs(checking_balance - expected_balance) < 0.01
             
