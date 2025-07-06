@@ -432,8 +432,10 @@ async def manual_transaction(action: AdminAction, admin_user: User = Depends(get
             # If parsing fails, use current time as fallback
             transaction_date = datetime.utcnow()
     
-    # Format amount to ensure 2 decimal places
-    amount = format_monetary_value(action.amount)
+    # Format amount to ensure 2 decimal places for display
+    formatted_amount = format_monetary_value(action.amount)
+    # Use float for database operations
+    amount = float(action.amount)
     
     if action.action == "credit":
         field = f"{action.account_type}_balance"
