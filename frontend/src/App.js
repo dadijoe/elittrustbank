@@ -750,30 +750,36 @@ const CustomerDashboard = ({ dashboard }) => {
       const transactionDate = new Date(transaction.created_at);
       const transactionMonth = transactionDate.getMonth();
       const transactionYear = transactionDate.getFullYear();
+      const amount = parseFloat(transaction.amount) || 0;
+      
+      // Only count approved transactions
+      if (transaction.status !== 'approved') return;
       
       // Calculate current month totals
       if (transactionMonth === currentMonth && transactionYear === currentYear) {
         if (transaction.transaction_type === 'credit' || 
-            (transaction.transaction_type === 'self' && transaction.to_user_id === liveData?.user?.id)) {
-          income += transaction.amount;
-        } else {
-          outcome += transaction.amount;
+            (transaction.from_user_id === 'system' && transaction.to_user_id === liveData?.user?.id) ||
+            (transaction.transaction_type === 'self' && transaction.to_account_info && transaction.from_user_id === liveData?.user?.id)) {
+          income += amount;
+        } else if (transaction.from_user_id === liveData?.user?.id) {
+          outcome += amount;
         }
       }
       
-      // Calculate monthly data for graph
-      const monthIndex = monthlyData.findIndex(m => {
+      // Calculate monthly data for graph (last 7 months)
+      const monthIndex = monthlyData.findIndex((m, idx) => {
         const targetMonth = new Date();
-        targetMonth.setMonth(currentMonth - (6 - monthlyData.indexOf(m)));
+        targetMonth.setMonth(currentMonth - (6 - idx));
         return targetMonth.getMonth() === transactionMonth && targetMonth.getFullYear() === transactionYear;
       });
       
       if (monthIndex !== -1) {
         if (transaction.transaction_type === 'credit' || 
-            (transaction.transaction_type === 'self' && transaction.to_user_id === liveData?.user?.id)) {
-          monthlyData[monthIndex].income += transaction.amount;
-        } else {
-          monthlyData[monthIndex].outcome += transaction.amount;
+            (transaction.from_user_id === 'system' && transaction.to_user_id === liveData?.user?.id) ||
+            (transaction.transaction_type === 'self' && transaction.to_account_info && transaction.from_user_id === liveData?.user?.id)) {
+          monthlyData[monthIndex].income += amount;
+        } else if (transaction.from_user_id === liveData?.user?.id) {
+          monthlyData[monthIndex].outcome += amount;
         }
       }
     });
