@@ -246,6 +246,10 @@ async def get_dashboard(current_user: User = Depends(get_current_user)):
     if '_id' in fresh_user:
         fresh_user['_id'] = str(fresh_user['_id'])
     
+    # Format monetary values
+    fresh_user['checking_balance'] = format_monetary_value(fresh_user.get('checking_balance', 0))
+    fresh_user['savings_balance'] = format_monetary_value(fresh_user.get('savings_balance', 0))
+    
     # Get recent transactions
     transactions = await db.transactions.find({
         "$or": [
@@ -254,10 +258,11 @@ async def get_dashboard(current_user: User = Depends(get_current_user)):
         ]
     }).sort("created_at", -1).limit(10).to_list(10)
     
-    # Convert ObjectId to string
+    # Convert ObjectId to string and format monetary values
     for transaction in transactions:
         if '_id' in transaction:
             transaction['_id'] = str(transaction['_id'])
+        transaction['amount'] = format_monetary_value(transaction.get('amount', 0))
     
     return {
         "user": fresh_user,
