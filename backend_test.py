@@ -1,8 +1,11 @@
 import requests
 import time
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 import sys
+import json
+import re
+from decimal import Decimal
 
 class BankAPITester:
     def __init__(self, base_url):
@@ -15,6 +18,8 @@ class BankAPITester:
         self.test_user_password = "Test123!"
         self.tests_run = 0
         self.tests_passed = 0
+        self.number_format_issues = []
+        self.transaction_test_results = []
 
     def run_test(self, name, method, endpoint, expected_status, data=None, token=None):
         """Run a single API test"""
