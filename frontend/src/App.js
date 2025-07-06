@@ -1174,7 +1174,10 @@ const TransferForm = () => {
     to_account_info: '',
     amount: '',
     transaction_type: 'internal',
-    description: ''
+    description: '',
+    recipient_account_number: '',
+    bank_name: '',
+    recipient_full_name: ''
   });
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
