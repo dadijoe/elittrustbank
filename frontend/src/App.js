@@ -992,7 +992,7 @@ const CustomerDashboard = ({ dashboard }) => {
                     <div className="grid grid-cols-2 gap-6 mb-8">
                       <div>
                         <div className="text-gray-500 text-sm font-medium mb-1">Income</div>
-                        <div className="text-2xl font-bold text-green-600">${incomeOutcomeStats.income.toFixed(2)}</div>
+                        <div className="text-2xl font-bold text-green-600">${formatCurrency(incomeOutcomeStats.income)}</div>
                         <div className="text-green-600 text-sm flex items-center mt-1">
                           <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                           <span>Live Updates</span>
@@ -1000,7 +1000,7 @@ const CustomerDashboard = ({ dashboard }) => {
                       </div>
                       <div>
                         <div className="text-gray-500 text-sm font-medium mb-1">Expense</div>
-                        <div className="text-2xl font-bold text-red-500">${incomeOutcomeStats.outcome.toFixed(2)}</div>
+                        <div className="text-2xl font-bold text-red-500">${formatCurrency(incomeOutcomeStats.outcome)}</div>
                         <div className="text-red-500 text-sm flex items-center mt-1">
                           <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
                           <span>Real-time</span>
