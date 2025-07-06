@@ -88,6 +88,11 @@ class Transaction(BaseModel):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     approved_at: Optional[datetime] = None
     admin_notes: Optional[str] = None
+    
+    class Config:
+        json_encoders = {
+            float: lambda v: f"{v:.2f}"
+        }
 
 class TransactionCreate(BaseModel):
     from_account_type: str = "checking"  # "checking" or "savings"
