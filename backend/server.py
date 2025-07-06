@@ -369,8 +369,10 @@ async def process_transaction(transaction_id: str, action: str, admin_user: User
         from_account_field = f"{transaction.get('from_account_type', 'checking')}_balance"
         from_balance = from_user.get(from_account_field, 0)
         
-        # Format amount to ensure 2 decimal places
-        amount = format_monetary_value(transaction["amount"])
+        # Format amount to ensure 2 decimal places for display
+        formatted_amount = format_monetary_value(transaction["amount"])
+        # Use float for database operations
+        amount = float(transaction["amount"])
         
         # Check if sender has sufficient funds in the specified account
         if from_balance < amount:
