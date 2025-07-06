@@ -111,6 +111,12 @@ class AdminAction(BaseModel):
     custom_date: Optional[str] = None  # Admin-selected date/time in ISO format
 
 # Helper functions
+def format_monetary_value(value):
+    """Format monetary values to always have 2 decimal places"""
+    if isinstance(value, (int, float)):
+        return float(f"{value:.2f}")
+    return value
+
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
