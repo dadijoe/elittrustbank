@@ -1856,7 +1856,7 @@ const AdminDashboard = () => {
                         </span>
                       </div>
                       <p className="font-medium text-gray-900">{transaction.description}</p>
-                      <p className="text-sm text-gray-500">Amount: ${transaction.amount.toFixed(2)}</p>
+                      <p className="text-sm text-gray-500">Amount: ${formatCurrency(transaction.amount)}</p>
                       <p className="text-sm text-gray-500">From: {transaction.from_user_id}</p>
                       {transaction.to_user_id && (
                         <p className="text-sm text-gray-500">To User: {transaction.to_user_id}</p>
