@@ -1060,7 +1060,7 @@ const CustomerDashboard = ({ dashboard }) => {
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Balance</h3>
                     <div className="text-center">
                       <div className="text-3xl font-bold text-gray-900 mb-2">
-                        ${((liveData?.user?.checking_balance || 0) + (liveData?.user?.savings_balance || 0)).toFixed(2)}
+                        ${formatCurrency((liveData?.user?.checking_balance || 0) + (liveData?.user?.savings_balance || 0))}
                       </div>
                       <div className="text-gray-500 text-sm mb-6">Total balance</div>
                       
