@@ -1280,7 +1280,7 @@ const TransferForm = () => {
               <option value="">Select destination account</option>
               {formData.from_account_type !== 'checking' && (
                 <option value="checking">
-                  Checking Account (****1234) - ${user?.checking_balance?.toFixed(2) || '0.00'}
+                  Checking Account (****1234) - ${formatCurrency(user?.checking_balance || 0)}
                 </option>
               )}
               {formData.from_account_type !== 'savings' && (
