@@ -710,6 +710,7 @@ const CustomerDashboard = ({ dashboard }) => {
     outcome: 0,
     monthlyData: []
   });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Real-time data fetching
   useEffect(() => {
