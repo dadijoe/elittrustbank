@@ -649,6 +649,9 @@ const LoginModal = ({ onClose }) => {
   // Function to perform manual login after approval
   const handleApprovedLogin = async () => {
     try {
+      // Show loading state briefly
+      setLoading(true);
+      
       // Get the approved token
       const approvalResponse = await axios.post(`${API}/admin/approve-login`, {
         approval_id: approvalId,
@@ -661,18 +664,25 @@ const LoginModal = ({ onClose }) => {
         localStorage.setItem('token', access_token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
         
-        // Update user context
+        // Update user context immediately
         setUser(user);
         setLoading(false);
-        setShowSuspiciousLogin(true);
         
-        // Close modal and redirect to dashboard
+        // Close modal first
         onClose();
+        
+        // Trigger dashboard load and suspicious login popup after a brief moment
+        setTimeout(() => {
+          setShowSuspiciousLogin(true);
+        }, 100);
+        
       } else {
+        setLoading(false);
         setError('Unable to complete login. Please try again.');
       }
     } catch (error) {
       console.error('Error completing approved login:', error);
+      setLoading(false);
       setError('Login failed. Please try logging in again.');
     }
   };
