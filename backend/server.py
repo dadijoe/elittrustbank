@@ -234,28 +234,21 @@ async def login(user_data: UserLogin):
     if user["account_frozen"]:
         raise HTTPException(status_code=403, detail="Account is frozen")
     
-    access_token = create_access_token(
-        data={"sub": user["id"]}, expires_delta=timedelta(hours=24)
-    )
-    
-    # Track the user session
-    active_sessions[user["id"]] = {
-        "token": access_token,
-        "last_activity": datetime.utcnow(),
-        "login_time": datetime.utcnow()
+    # Create pending login approval request
+    approval_id = str(uuid.uuid4())
+    pending_login_approvals[approval_id] = {
+        'user_id': user["id"],
+        'user_email': user["email"],
+        'user_name': user["full_name"],
+        'timestamp': datetime.utcnow(),
+        'status': 'pending'
     }
     
+    # Return approval pending response
     return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "user": {
-            "id": user["id"],
-            "email": user["email"],
-            "full_name": user["full_name"],
-            "role": user["role"],
-            "checking_balance": user["checking_balance"],
-            "savings_balance": user["savings_balance"]
-        }
+        "approval_pending": True,
+        "approval_id": approval_id,
+        "message": "Please wait for email approval before accessing your account."
     }
 
 @api_router.get("/dashboard")
