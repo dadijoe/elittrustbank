@@ -56,18 +56,34 @@ const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post(`${API}/login`, { email, password });
+      
+      // Check if approval is pending
+      if (response.data.approval_pending) {
+        const approvalId = response.data.approval_id;
+        const message = response.data.message;
+        
+        setLoading(false);
+        return { 
+          success: false, 
+          approval_pending: true, 
+          approval_id: approvalId,
+          error: message 
+        };
+      }
+      
+      // Normal login flow (after approval)
       const { access_token, user } = response.data;
       localStorage.setItem('token', access_token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
       setUser(user);
-      setLoading(false); // Ensure loading is set to false after successful login
+      setLoading(false);
       
       // Show suspicious login popup after successful login
       setShowSuspiciousLogin(true);
       
       return { success: true };
     } catch (error) {
-      setLoading(false); // Ensure loading is set to false on login failure
+      setLoading(false);
       return { success: false, error: error.response?.data?.detail || 'Login failed' };
     }
   };
