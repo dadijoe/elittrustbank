@@ -160,7 +160,14 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     token_issued_at = datetime.fromtimestamp(payload.get("iat", 0))
     force_logout_at = user.get("force_logout_at")
     if force_logout_at and token_issued_at < force_logout_at:
+        # Remove from active sessions if force logged out
+        if user_id in active_sessions:
+            del active_sessions[user_id]
         raise HTTPException(status_code=401, detail="Session terminated by administrator")
+    
+    # Update last activity for the user session
+    if user_id in active_sessions:
+        active_sessions[user_id]["last_activity"] = datetime.utcnow()
     
     return User(**user)
 
