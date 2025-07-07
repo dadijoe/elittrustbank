@@ -1677,6 +1677,13 @@ const AdminDashboard = () => {
     fetchPendingTransactions();
     fetchAllUsers();
     fetchActiveSessions();
+    
+    // Set up real-time polling for user login status
+    const interval = setInterval(() => {
+      fetchAllUsers(); // This will refresh login status
+    }, 3000); // Poll every 3 seconds for real-time updates
+
+    return () => clearInterval(interval);
   }, []);
 
   const fetchPendingUsers = async () => {
