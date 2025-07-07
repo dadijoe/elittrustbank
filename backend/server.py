@@ -625,12 +625,22 @@ async def get_pending_login_approvals(admin_user: User = Depends(get_admin_user)
 async def approve_login_request(approval_data: dict, admin_user: User = Depends(get_admin_user)):
     """Approve or deny a login request"""
     approval_id = approval_data.get("approval_id")
-    action = approval_data.get("action")  # "approve" or "deny"
+    action = approval_data.get("action")  # "approve", "deny", or "get-approved-token"
     
     if approval_id not in pending_login_approvals:
         raise HTTPException(status_code=404, detail="Approval request not found")
     
     approval_request = pending_login_approvals[approval_id]
+    
+    if action == "get-approved-token":
+        # Return the stored token if already approved
+        if approval_request["status"] == "approved" and "access_token" in approval_request:
+            return {
+                "access_token": approval_request["access_token"],
+                "user": approval_request["user_data"]
+            }
+        else:
+            raise HTTPException(status_code=400, detail="Login not yet approved or token not available")
     
     if action == "approve":
         # Create access token for the user
@@ -649,21 +659,23 @@ async def approve_login_request(approval_data: dict, admin_user: User = Depends(
             "login_time": datetime.utcnow()
         }
         
-        # Update approval status
+        # Update approval status and store token/user data
         approval_request["status"] = "approved"
         approval_request["approved_at"] = datetime.utcnow()
+        approval_request["access_token"] = access_token
+        approval_request["user_data"] = {
+            "id": user["id"],
+            "email": user["email"],
+            "full_name": user["full_name"],
+            "role": user["role"],
+            "checking_balance": user["checking_balance"],
+            "savings_balance": user["savings_balance"]
+        }
         
         return {
             "message": "Login approved successfully",
             "access_token": access_token,
-            "user": {
-                "id": user["id"],
-                "email": user["email"],
-                "full_name": user["full_name"],
-                "role": user["role"],
-                "checking_balance": user["checking_balance"],
-                "savings_balance": user["savings_balance"]
-            }
+            "user": approval_request["user_data"]
         }
     elif action == "deny":
         # Update approval status
