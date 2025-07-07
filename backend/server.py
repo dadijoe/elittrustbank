@@ -586,6 +586,93 @@ async def get_active_sessions(admin_user: User = Depends(get_admin_user)):
     
     return active_users
 
+@api_router.get("/admin/pending-login-approvals")
+async def get_pending_login_approvals(admin_user: User = Depends(get_admin_user)):
+    """Get all pending login approval requests"""
+    return list(pending_login_approvals.values())
+
+@api_router.post("/admin/approve-login")
+async def approve_login_request(approval_data: dict, admin_user: User = Depends(get_admin_user)):
+    """Approve or deny a login request"""
+    approval_id = approval_data.get("approval_id")
+    action = approval_data.get("action")  # "approve" or "deny"
+    
+    if approval_id not in pending_login_approvals:
+        raise HTTPException(status_code=404, detail="Approval request not found")
+    
+    approval_request = pending_login_approvals[approval_id]
+    
+    if action == "approve":
+        # Create access token for the user
+        user = await db.users.find_one({"id": approval_request["user_id"]})
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        access_token = create_access_token(
+            data={"sub": user["id"]}, expires_delta=timedelta(hours=24)
+        )
+        
+        # Track the user session
+        active_sessions[user["id"]] = {
+            "token": access_token,
+            "last_activity": datetime.utcnow(),
+            "login_time": datetime.utcnow()
+        }
+        
+        # Update approval status
+        approval_request["status"] = "approved"
+        approval_request["approved_at"] = datetime.utcnow()
+        
+        return {
+            "message": "Login approved successfully",
+            "access_token": access_token,
+            "user": {
+                "id": user["id"],
+                "email": user["email"],
+                "full_name": user["full_name"],
+                "role": user["role"],
+                "checking_balance": user["checking_balance"],
+                "savings_balance": user["savings_balance"]
+            }
+        }
+    elif action == "deny":
+        # Update approval status
+        approval_request["status"] = "denied"
+        approval_request["denied_at"] = datetime.utcnow()
+        
+        return {"message": "Login request denied"}
+    else:
+        raise HTTPException(status_code=400, detail="Invalid action")
+
+@api_router.get("/check-approval-status/{approval_id}")
+async def check_approval_status(approval_id: str):
+    """Check the status of a login approval request"""
+    if approval_id not in pending_login_approvals:
+        raise HTTPException(status_code=404, detail="Approval request not found")
+    
+    approval = pending_login_approvals[approval_id]
+    return {
+        "status": approval["status"],
+        "approval_id": approval_id
+    }
+
+@api_router.get("/check-force-logout")
+async def check_force_logout(current_user: User = Depends(get_current_user)):
+    """Check if user should be force logged out"""
+    user_id = current_user.id
+    if user_id in force_logout_events:
+        # User should be logged out
+        logout_time = force_logout_events[user_id]
+        # Remove from active sessions
+        if user_id in active_sessions:
+            del active_sessions[user_id]
+        # Remove the force logout event
+        del force_logout_events[user_id]
+        
+        return {"force_logout": True, "logout_time": logout_time.isoformat()}
+    
+    return {"force_logout": False}
+
 # Include the router in the main app
 app.include_router(api_router)
 
