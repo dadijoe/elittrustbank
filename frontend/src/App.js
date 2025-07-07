@@ -269,49 +269,49 @@ const HomePage = () => {
             </div>
 
             {/* Right Content - Floating Card */}
-            <div className="relative">
+            <div className="relative mt-8 lg:mt-0">
               {/* Background Elements */}
-              <div className="absolute top-0 right-0 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-50"></div>
-              <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-50"></div>
+              <div className="absolute top-0 right-0 w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-50"></div>
+              <div className="absolute bottom-0 left-0 w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-50"></div>
               
               {/* Main Card */}
-              <div className="relative bg-white p-8 rounded-3xl shadow-2xl backdrop-blur-sm border border-gray-100">
+              <div className="relative bg-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-2xl backdrop-blur-sm border border-gray-100">
                 {/* Notification */}
-                <div className="absolute -top-4 right-8 bg-white rounded-2xl shadow-lg p-4 border border-gray-100">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
-                      <span className="text-orange-600 font-bold text-lg">N</span>
+                <div className="absolute -top-2 sm:-top-4 right-4 sm:right-8 bg-white rounded-xl sm:rounded-2xl shadow-lg p-2 sm:p-4 border border-gray-100">
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-100 rounded-lg sm:rounded-xl flex items-center justify-center">
+                      <span className="text-orange-600 font-bold text-sm sm:text-lg">N</span>
                     </div>
                     <div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm font-semibold text-gray-900">Net payment</span>
-                        <span className="bg-green-100 text-green-600 text-xs px-2 py-1 rounded-full font-medium">new</span>
+                      <div className="flex items-center space-x-1 sm:space-x-2">
+                        <span className="text-xs sm:text-sm font-semibold text-gray-900">Net payment</span>
+                        <span className="bg-green-100 text-green-600 text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full font-medium">new</span>
                       </div>
                       <p className="text-xs text-gray-500">Today, 12:50 PM</p>
                     </div>
                     <div className="text-right">
                       <div className="flex items-center space-x-1">
-                        <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                        <span className="text-sm font-semibold">25.40</span>
+                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-500 rounded-full"></div>
+                        <span className="text-xs sm:text-sm font-semibold">25.40</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Balance Card */}
-                <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-6 text-white relative overflow-hidden mt-8">
-                  <div className="absolute top-4 right-4">
-                    <svg className="w-8 h-8 text-white/80" fill="currentColor" viewBox="0 0 24 24">
+                <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white relative overflow-hidden mt-6 sm:mt-8">
+                  <div className="absolute top-2 right-2 sm:top-4 sm:right-4">
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white/80" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                     </svg>
                   </div>
                   <div className="relative z-10">
-                    <p className="text-blue-100 text-sm font-medium mb-1">****4519</p>
-                    <div className="text-3xl font-bold mb-2">5,203.45 <span className="text-lg font-normal text-blue-200">USD</span></div>
-                    <p className="text-blue-200 text-sm">Total Balance</p>
+                    <p className="text-blue-100 text-xs sm:text-sm font-medium mb-1">****4519</p>
+                    <div className="text-2xl sm:text-3xl font-bold mb-2">5,203.45 <span className="text-sm sm:text-lg font-normal text-blue-200">USD</span></div>
+                    <p className="text-blue-200 text-xs sm:text-sm">Total Balance</p>
                     
                     {/* User Avatar */}
-                    <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-white rounded-full p-1">
+                    <div className="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-full p-1">
                       <img 
                         src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=64&h=64&fit=crop&crop=face&auto=format" 
                         alt="User" 
