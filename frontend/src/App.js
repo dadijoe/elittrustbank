@@ -2043,8 +2043,34 @@ const AdminDashboard = () => {
                           {user.is_approved ? 'Approved' : 'Pending'}
                         </span>
                       </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          user.login_status === 'logged_in' 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-red-100 text-red-800'
+                        }`}>
+                          {user.login_status === 'logged_in' ? 'Logged In' : 'Logged Out'}
+                        </span>
+                        {user.login_status === 'logged_in' && user.last_activity && (
+                          <div className="text-xs text-gray-500 mt-1">
+                            Active: {new Date(user.last_activity).toLocaleTimeString()}
+                          </div>
+                        )}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {new Date(user.created_at).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        {user.login_status === 'logged_in' ? (
+                          <button
+                            onClick={() => handleLogoutUser(user.id)}
+                            className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors text-xs"
+                          >
+                            Log Out
+                          </button>
+                        ) : (
+                          <span className="text-gray-400 text-xs">No action</span>
+                        )}
                       </td>
                     </tr>
                   ))}
