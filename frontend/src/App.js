@@ -620,6 +620,7 @@ const LoginModal = ({ onClose }) => {
   const [showApprovalPending, setShowApprovalPending] = useState(false);
   const [approvalId, setApprovalId] = useState('');
   const [isCheckingApproval, setIsCheckingApproval] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
 
   // Function to check approval status and update UI
   const checkApprovalStatus = async (approvalIdToCheck) => {
