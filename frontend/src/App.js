@@ -597,98 +597,12 @@ const SignupModal = ({ onClose }) => {
 };
 
 const LoginModal = ({ onClose }) => {
-  const { login, setUser, setLoading, setShowSuspiciousLogin } = React.useContext(AuthContext);
+  const { login } = React.useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const [error, setError] = useState('');
-  const [showApprovalPending, setShowApprovalPending] = useState(false);
-  const [approvalId, setApprovalId] = useState('');
-  const [isCheckingApproval, setIsCheckingApproval] = useState(false);
-  const [isApproved, setIsApproved] = useState(false);
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-
-  // Function to check approval status and update UI
-  const checkApprovalStatus = async (approvalIdToCheck) => {
-    try {
-      const response = await axios.get(`${API}/check-approval-status/${approvalIdToCheck}`);
-      
-      if (response.data.status === 'approved') {
-        // Stop checking - approval is complete
-        setIsCheckingApproval(false);
-        // Don't auto-login, just update the UI to show "Login" button
-        return 'approved';
-      } else if (response.data.status === 'denied') {
-        setIsCheckingApproval(false);
-        setShowApprovalPending(false);
-        setError('Login request was denied by administrator');
-        return 'denied';
-      }
-      // If still pending, continue checking
-      return 'pending';
-    } catch (error) {
-      console.error('Error checking approval status:', error);
-      return 'error';
-    }
-  };
-
-  // Function to perform manual login after approval
-  const handleApprovedLogin = async () => {
-    try {
-      // Show loading state on button
-      setIsLoggingIn(true);
-      
-      // Get the approved token (this is necessary to retrieve the stored authentication)
-      const approvalResponse = await axios.post(`${API}/admin/approve-login`, {
-        approval_id: approvalId,
-        action: 'get-approved-token'
-      });
-      
-      if (approvalResponse.data.access_token) {
-        // Authenticate user immediately - treat this as final login step
-        const { access_token, user } = approvalResponse.data;
-        
-        // Set authentication data
-        localStorage.setItem('token', access_token);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-        
-        // Close modal immediately
-        onClose();
-        
-        // Update user context to trigger dashboard redirect
-        setUser(user);
-        setLoading(false);
-        
-        // Show suspicious login popup (part of normal login flow)
-        setTimeout(() => {
-          setShowSuspiciousLogin(true);
-        }, 100);
-        
-      } else {
-        setIsLoggingIn(false);
-        setError('Unable to complete login. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error completing approved login:', error);
-      setIsLoggingIn(false);
-      setError('Authentication failed. Please try again.');
-    }
-  };
-
-  // Start polling for approval status
-  React.useEffect(() => {
-    if (isCheckingApproval && approvalId && !isApproved) {
-      const interval = setInterval(async () => {
-        const status = await checkApprovalStatus(approvalId);
-        if (status === 'approved') {
-          setIsApproved(true);
-        }
-      }, 2000); // Check every 2 seconds
-
-      return () => clearInterval(interval);
-    }
-  }, [isCheckingApproval, approvalId, isApproved]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -697,72 +611,10 @@ const LoginModal = ({ onClose }) => {
     const result = await login(formData.email, formData.password);
     if (result.success) {
       onClose();
-    } else if (result.approval_pending) {
-      // Show approval pending modal and start checking for approval
-      setShowApprovalPending(true);
-      setApprovalId(result.approval_id);
-      setIsCheckingApproval(true);
     } else {
       setError(result.error);
     }
   };
-
-  if (showApprovalPending) {
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className="bg-white rounded-lg p-8 max-w-md w-full">
-          <div className="text-center">
-            <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              {isApproved ? (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              ) : isCheckingApproval ? (
-                <div className="animate-spin rounded-full h-8 w-8 border-2 border-white border-t-transparent"></div>
-              ) : (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              )}
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              {isApproved ? 'Login Approved!' : 'Login Approval Pending'}
-            </h2>
-            <p className="text-gray-600 mb-6">
-              {isApproved 
-                ? 'Your login has been approved. Click Login to access your account.'
-                : 'Please wait for email approval before accessing your account.'
-              }
-            </p>
-            {isApproved ? (
-              <button
-                onClick={handleApprovedLogin}
-                disabled={isLoggingIn}
-                className={`px-6 py-2 rounded-lg transition-colors font-medium ${
-                  isLoggingIn 
-                    ? 'bg-gray-400 text-gray-700 cursor-not-allowed' 
-                    : 'bg-green-600 text-white hover:bg-green-700'
-                }`}
-              >
-                {isLoggingIn ? 'Logging In...' : 'Login'}
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  setShowApprovalPending(false);
-                  setIsCheckingApproval(false);
-                  onClose();
-                }}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Close
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
