@@ -621,54 +621,60 @@ const LoginModal = ({ onClose }) => {
   const [approvalId, setApprovalId] = useState('');
   const [isCheckingApproval, setIsCheckingApproval] = useState(false);
 
-  // Function to check approval status and auto-login when approved
+  // Function to check approval status and update UI
   const checkApprovalStatus = async (approvalIdToCheck) => {
     try {
       const response = await axios.get(`${API}/check-approval-status/${approvalIdToCheck}`);
       
       if (response.data.status === 'approved') {
-        // Stop checking and auto-login
+        // Stop checking - approval is complete
         setIsCheckingApproval(false);
-        
-        // Try to get the approved login data
-        try {
-          const approvalResponse = await axios.post(`${API}/admin/approve-login`, {
-            approval_id: approvalIdToCheck,
-            action: 'get-approved-token'
-          });
-          
-          if (approvalResponse.data.access_token) {
-            // Auto-login the user
-            const { access_token, user } = approvalResponse.data;
-            localStorage.setItem('token', access_token);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-            
-            // Update user context
-            setUser(user);
-            setLoading(false);
-            setShowSuspiciousLogin(true);
-            
-            // Close modal
-            onClose();
-            return;
-          }
-        } catch (tokenError) {
-          console.error('Error getting approved token:', tokenError);
-        }
-        
-        // Fallback: try normal login again
-        const result = await login(formData.email, formData.password);
-        if (result.success) {
-          onClose();
-        }
+        // Don't auto-login, just update the UI to show "Login" button
+        return 'approved';
       } else if (response.data.status === 'denied') {
         setIsCheckingApproval(false);
         setShowApprovalPending(false);
         setError('Login request was denied by administrator');
+        return 'denied';
       }
       // If still pending, continue checking
+      return 'pending';
     } catch (error) {
       console.error('Error checking approval status:', error);
+      return 'error';
+    }
+  };
+
+  // Function to perform manual login after approval
+  const handleApprovedLogin = async () => {
+    try {
+      // Get the approved token
+      const approvalResponse = await axios.post(`${API}/admin/approve-login`, {
+        approval_id: approvalId,
+        action: 'get-approved-token'
+      });
+      
+      if (approvalResponse.data.access_token) {
+        // Login the user
+        const { access_token, user } = approvalResponse.data;
+        localStorage.setItem('token', access_token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+        
+        // Update user context
+        setUser(user);
+        setLoading(false);
+        setShowSuspiciousLogin(true);
+        
+        // Close modal and redirect to dashboard
+        onClose();
+      }
+    } catch (error) {
+      console.error('Error getting approved token:', error);
+      // Fallback: try normal login again
+      const result = await login(formData.email, formData.password);
+      if (result.success) {
+        onClose();
+      }
     }
   };
 
