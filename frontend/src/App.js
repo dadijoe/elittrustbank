@@ -656,7 +656,7 @@ const LoginModal = ({ onClose }) => {
       });
       
       if (approvalResponse.data.access_token) {
-        // Login the user
+        // Login the user immediately
         const { access_token, user } = approvalResponse.data;
         localStorage.setItem('token', access_token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
@@ -668,14 +668,12 @@ const LoginModal = ({ onClose }) => {
         
         // Close modal and redirect to dashboard
         onClose();
+      } else {
+        setError('Unable to complete login. Please try again.');
       }
     } catch (error) {
-      console.error('Error getting approved token:', error);
-      // Fallback: try normal login again
-      const result = await login(formData.email, formData.password);
-      if (result.success) {
-        onClose();
-      }
+      console.error('Error completing approved login:', error);
+      setError('Login failed. Please try logging in again.');
     }
   };
 
