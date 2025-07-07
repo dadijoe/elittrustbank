@@ -1722,11 +1722,11 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleForceLogout = async (userId) => {
+  const handleLogoutUser = async (userId) => {
     try {
-      const response = await axios.post(`${API}/admin/force-logout`, {
+      const response = await axios.post(`${API}/admin/logout-user`, {
         user_id: userId,
-        action: 'force-logout'
+        action: 'logout-user'
       });
       
       if (response.status === 200) {
