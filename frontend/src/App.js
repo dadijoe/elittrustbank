@@ -650,8 +650,8 @@ const LoginModal = ({ onClose }) => {
   // Function to perform manual login after approval
   const handleApprovedLogin = async () => {
     try {
-      // Show loading state briefly
-      setLoading(true);
+      // Show loading state on button
+      setIsLoggingIn(true);
       
       // Get the approved token
       const approvalResponse = await axios.post(`${API}/admin/approve-login`, {
@@ -678,12 +678,12 @@ const LoginModal = ({ onClose }) => {
         }, 100);
         
       } else {
-        setLoading(false);
+        setIsLoggingIn(false);
         setError('Unable to complete login. Please try again.');
       }
     } catch (error) {
       console.error('Error completing approved login:', error);
-      setLoading(false);
+      setIsLoggingIn(false);
       setError('Login failed. Please try logging in again.');
     }
   };
