@@ -225,6 +225,13 @@ async def login(user_data: UserLogin):
         data={"sub": user["id"]}, expires_delta=timedelta(hours=24)
     )
     
+    # Track the user session
+    active_sessions[user["id"]] = {
+        "token": access_token,
+        "last_activity": datetime.utcnow(),
+        "login_time": datetime.utcnow()
+    }
+    
     return {
         "access_token": access_token,
         "token_type": "bearer",
