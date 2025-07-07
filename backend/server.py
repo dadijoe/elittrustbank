@@ -33,6 +33,9 @@ db = client[os.environ['DB_NAME']]
 # Add a blacklisted tokens set for force logout functionality
 blacklisted_tokens = set()
 
+# Add session tracking for real-time login status
+active_sessions = {}  # {user_id: {'token': token, 'last_activity': datetime, 'login_time': datetime}}
+
 # Security
 security = HTTPBearer()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
