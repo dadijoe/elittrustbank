@@ -542,6 +542,9 @@ async def logout_user(action: AdminAction, admin_user: User = Depends(get_admin_
             blacklisted_tokens.add(token)
             del active_sessions[user_id]
         
+        # Add force logout event for real-time communication
+        force_logout_events[user_id] = datetime.utcnow()
+        
         # Also update the force logout timestamp for additional security
         await db.users.update_one(
             {"id": user_id},
