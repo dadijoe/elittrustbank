@@ -1756,10 +1756,12 @@ const AdminDashboard = () => {
     fetchPendingTransactions();
     fetchAllUsers();
     fetchActiveSessions();
+    fetchPendingLoginApprovals();
     
-    // Set up real-time polling for user login status
+    // Set up real-time polling for user login status and pending approvals
     const interval = setInterval(() => {
       fetchAllUsers(); // This will refresh login status
+      fetchPendingLoginApprovals(); // This will refresh pending login approvals
     }, 3000); // Poll every 3 seconds for real-time updates
 
     return () => clearInterval(interval);
