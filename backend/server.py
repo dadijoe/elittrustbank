@@ -36,6 +36,12 @@ blacklisted_tokens = set()
 # Add session tracking for real-time login status
 active_sessions = {}  # {user_id: {'token': token, 'last_activity': datetime, 'login_time': datetime}}
 
+# Add pending login approvals tracking
+pending_login_approvals = {}  # {approval_id: {'user_id': str, 'email': str, 'timestamp': datetime, 'status': 'pending'}}
+
+# Add force logout events for real-time communication
+force_logout_events = {}  # {user_id: datetime} - tracks when users should be force logged out
+
 # Security
 security = HTTPBearer()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
