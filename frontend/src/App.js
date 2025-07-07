@@ -2281,13 +2281,13 @@ const AdminDashboard = () => {
                       </div>
                       <div className="flex space-x-2">
                         <button
-                          onClick={() => handleLoginApproval(approval.approval_id || Object.keys(pendingLoginApprovals)[index], 'approve')}
+                          onClick={() => handleLoginApproval(approval.approval_id, 'approve')}
                           className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors text-sm"
                         >
                           Approve
                         </button>
                         <button
-                          onClick={() => handleLoginApproval(approval.approval_id || Object.keys(pendingLoginApprovals)[index], 'deny')}
+                          onClick={() => handleLoginApproval(approval.approval_id, 'deny')}
                           className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors text-sm"
                         >
                           Deny
