@@ -716,7 +716,11 @@ const LoginModal = ({ onClose }) => {
         <div className="bg-white rounded-lg p-8 max-w-md w-full">
           <div className="text-center">
             <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              {isCheckingApproval ? (
+              {isApproved ? (
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              ) : isCheckingApproval ? (
                 <div className="animate-spin rounded-full h-8 w-8 border-2 border-white border-t-transparent"></div>
               ) : (
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -724,21 +728,37 @@ const LoginModal = ({ onClose }) => {
                 </svg>
               )}
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Login Approval Pending</h2>
-            <p className="text-gray-600 mb-2">Please wait for email approval before accessing your account.</p>
-            {isCheckingApproval && (
-              <p className="text-blue-600 text-sm mb-6">Waiting for administrator approval... You will be logged in automatically.</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              {isApproved ? 'Login Approved!' : 'Login Approval Pending'}
+            </h2>
+            <p className="text-gray-600 mb-2">
+              {isApproved 
+                ? 'Your login has been approved. Click Login to access your account.'
+                : 'Please wait for email approval before accessing your account.'
+              }
+            </p>
+            {isCheckingApproval && !isApproved && (
+              <p className="text-blue-600 text-sm mb-6">Waiting for administrator approval...</p>
             )}
-            <button
-              onClick={() => {
-                setShowApprovalPending(false);
-                setIsCheckingApproval(false);
-                onClose();
-              }}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Close
-            </button>
+            {isApproved ? (
+              <button
+                onClick={handleApprovedLogin}
+                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                Login
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setShowApprovalPending(false);
+                  setIsCheckingApproval(false);
+                  onClose();
+                }}
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Close
+              </button>
+            )}
           </div>
         </div>
       </div>
