@@ -1930,6 +1930,16 @@ const AdminDashboard = () => {
             Credit/Debit Account
           </button>
           <button
+            onClick={() => setActiveTab('pending-login-approvals')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'pending-login-approvals' 
+                ? 'border-navy-500 text-navy-600' 
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            Login Approvals ({pendingLoginApprovals.length})
+          </button>
+          <button
             onClick={() => setActiveTab('active-sessions')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'active-sessions' 
@@ -1949,15 +1959,6 @@ const AdminDashboard = () => {
           >
             All Users
           </button>
-          <button
-            onClick={() => setActiveTab('all-users')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'all-users' 
-                ? 'border-navy-500 text-navy-600' 
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            }`}
-          >
-            All Users
           </button>
         </nav>
       </div>
