@@ -1730,13 +1730,13 @@ const AdminDashboard = () => {
       });
       
       if (response.status === 200) {
-        // Refresh active sessions
-        fetchActiveSessions();
+        // Immediately refresh user list to update status
+        fetchAllUsers();
         alert('User has been logged out successfully!');
       }
     } catch (error) {
-      console.error('Error forcing logout:', error);
-      alert(`Error: ${error.response?.data?.detail || 'Failed to logout user'}`);
+      console.error('Error logging out user:', error);
+      alert('Error logging out user');
     }
   };
 
