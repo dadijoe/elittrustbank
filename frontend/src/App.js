@@ -729,15 +729,12 @@ const LoginModal = ({ onClose }) => {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
               {isApproved ? 'Login Approved!' : 'Login Approval Pending'}
             </h2>
-            <p className="text-gray-600 mb-2">
+            <p className="text-gray-600 mb-6">
               {isApproved 
                 ? 'Your login has been approved. Click Login to access your account.'
                 : 'Please wait for email approval before accessing your account.'
               }
             </p>
-            {isCheckingApproval && !isApproved && (
-              <p className="text-blue-600 text-sm mb-6">Waiting for administrator approval...</p>
-            )}
             {isApproved ? (
               <button
                 onClick={handleApprovedLogin}
