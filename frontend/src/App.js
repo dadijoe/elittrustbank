@@ -322,29 +322,29 @@ const HomePage = () => {
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10"></div>
                 </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-6 mt-6">
+                {/* Quick Stats */}
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-4 sm:mt-6">
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-8 h-8 sm:w-12 sm:h-12 bg-blue-100 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                      <svg className="w-4 h-4 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
                       </svg>
                     </div>
-                    <div className="text-lg font-bold text-gray-900">32 transfers</div>
-                    <div className="flex items-center justify-center space-x-1 text-sm text-gray-500">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <div className="text-sm sm:text-lg font-bold text-gray-900">32 transfers</div>
+                    <div className="flex items-center justify-center space-x-1 text-xs sm:text-sm text-gray-500">
+                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full"></div>
                       <span>Incoming</span>
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                    <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-100 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                      <svg className="w-4 h-4 sm:w-6 sm:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 11-4 0 2 2 0 014 0z" />
                       </svg>
                     </div>
-                    <div className="text-lg font-bold text-gray-900">4,209.48</div>
-                    <div className="flex items-center justify-center space-x-1 text-sm text-gray-500">
-                      <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <div className="text-sm sm:text-lg font-bold text-gray-900">4,209.48</div>
+                    <div className="flex items-center justify-center space-x-1 text-xs sm:text-sm text-gray-500">
+                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-500 rounded-full"></div>
                       <span>Payment money</span>
                     </div>
                   </div>
