@@ -1982,7 +1982,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="flex space-x-2">
                       <button
-                        onClick={() => handleForceLogout(session.id)}
+                        onClick={() => handleLogoutUser(session.id)}
                         className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
                         disabled={session.force_logout_at}
                       >
