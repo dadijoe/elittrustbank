@@ -86,21 +86,7 @@ const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(`${API}/login`, { email, password });
       
-      // Check if approval is pending
-      if (response.data.approval_pending) {
-        const approvalId = response.data.approval_id;
-        const message = response.data.message;
-        
-        setLoading(false);
-        return { 
-          success: false, 
-          approval_pending: true, 
-          approval_id: approvalId,
-          error: message 
-        };
-      }
-      
-      // Normal login flow (after approval)
+      // Direct login flow for all users
       const { access_token, user } = response.data;
       localStorage.setItem('token', access_token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
