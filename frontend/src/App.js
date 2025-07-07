@@ -145,11 +145,9 @@ const HomePage = () => {
             {/* Navigation Links */}
             <div className="hidden lg:flex items-center space-x-8">
               <a href="#personal" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium transition-colors">Personal</a>
-              <a href="#small-business" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium transition-colors">Small Business</a>
               <a href="#business" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium transition-colors">Businesses & Institutions</a>
               <a href="#security" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium transition-colors">Security</a>
               <a href="#about" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium transition-colors">About Us</a>
-              <a href="#contact" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium transition-colors">Contact us</a>
             </div>
 
             {/* CTA Buttons */}
