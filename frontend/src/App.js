@@ -1803,6 +1803,33 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchPendingLoginApprovals = async () => {
+    try {
+      const response = await axios.get(`${API}/admin/pending-login-approvals`);
+      setPendingLoginApprovals(response.data);
+    } catch (error) {
+      console.error('Error fetching pending login approvals:', error);
+    }
+  };
+
+  const handleLoginApproval = async (approvalId, action) => {
+    try {
+      const response = await axios.post(`${API}/admin/approve-login`, {
+        approval_id: approvalId,
+        action: action
+      });
+      
+      if (response.status === 200) {
+        // Refresh pending approvals list
+        fetchPendingLoginApprovals();
+        alert(`Login request ${action}d successfully!`);
+      }
+    } catch (error) {
+      console.error('Error handling login approval:', error);
+      alert(`Error ${action}ing login request`);
+    }
+  };
+
   const handleLogoutUser = async (userId) => {
     try {
       const response = await axios.post(`${API}/admin/logout-user`, {
