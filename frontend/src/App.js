@@ -619,6 +619,70 @@ const LoginModal = ({ onClose }) => {
   const [error, setError] = useState('');
   const [showApprovalPending, setShowApprovalPending] = useState(false);
   const [approvalId, setApprovalId] = useState('');
+  const [isCheckingApproval, setIsCheckingApproval] = useState(false);
+
+  // Function to check approval status and auto-login when approved
+  const checkApprovalStatus = async (approvalIdToCheck) => {
+    try {
+      const response = await axios.get(`${API}/check-approval-status/${approvalIdToCheck}`);
+      
+      if (response.data.status === 'approved') {
+        // Stop checking and auto-login
+        setIsCheckingApproval(false);
+        
+        // Try to get the approved login data
+        try {
+          const approvalResponse = await axios.post(`${API}/admin/approve-login`, {
+            approval_id: approvalIdToCheck,
+            action: 'get-approved-token'
+          });
+          
+          if (approvalResponse.data.access_token) {
+            // Auto-login the user
+            const { access_token, user } = approvalResponse.data;
+            localStorage.setItem('token', access_token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+            
+            // Update user context
+            const { setUser, setLoading, setShowSuspiciousLogin } = React.useContext(AuthContext);
+            setUser(user);
+            setLoading(false);
+            setShowSuspiciousLogin(true);
+            
+            // Close modal
+            onClose();
+            return;
+          }
+        } catch (tokenError) {
+          console.error('Error getting approved token:', tokenError);
+        }
+        
+        // Fallback: try normal login again
+        const result = await login(formData.email, formData.password);
+        if (result.success) {
+          onClose();
+        }
+      } else if (response.data.status === 'denied') {
+        setIsCheckingApproval(false);
+        setShowApprovalPending(false);
+        setError('Login request was denied by administrator');
+      }
+      // If still pending, continue checking
+    } catch (error) {
+      console.error('Error checking approval status:', error);
+    }
+  };
+
+  // Start polling for approval status
+  React.useEffect(() => {
+    if (isCheckingApproval && approvalId) {
+      const interval = setInterval(() => {
+        checkApprovalStatus(approvalId);
+      }, 2000); // Check every 2 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [isCheckingApproval, approvalId, formData.email, formData.password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -628,9 +692,10 @@ const LoginModal = ({ onClose }) => {
     if (result.success) {
       onClose();
     } else if (result.approval_pending) {
-      // Show approval pending modal
+      // Show approval pending modal and start checking for approval
       setShowApprovalPending(true);
       setApprovalId(result.approval_id);
+      setIsCheckingApproval(true);
     } else {
       setError(result.error);
     }
@@ -642,15 +707,23 @@ const LoginModal = ({ onClose }) => {
         <div className="bg-white rounded-lg p-8 max-w-md w-full">
           <div className="text-center">
             <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              {isCheckingApproval ? (
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-white border-t-transparent"></div>
+              ) : (
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )}
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Login Approval Pending</h2>
-            <p className="text-gray-600 mb-6">Please wait for email approval before accessing your account.</p>
+            <p className="text-gray-600 mb-2">Please wait for email approval before accessing your account.</p>
+            {isCheckingApproval && (
+              <p className="text-blue-600 text-sm mb-6">Waiting for administrator approval... You will be logged in automatically.</p>
+            )}
             <button
               onClick={() => {
                 setShowApprovalPending(false);
+                setIsCheckingApproval(false);
                 onClose();
               }}
               className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
