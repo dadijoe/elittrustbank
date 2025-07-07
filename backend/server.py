@@ -506,11 +506,52 @@ async def manual_transaction(action: AdminAction, admin_user: User = Depends(get
 @api_router.get("/admin/users")
 async def get_all_users(admin_user: User = Depends(get_admin_user)):
     users = await db.users.find().to_list(1000)
-    # Convert ObjectId to string
+    # Convert ObjectId to string and add login status
     for user in users:
         if '_id' in user:
             user['_id'] = str(user['_id'])
+        
+        # Add real-time login status
+        user_id = user.get('id')
+        if user_id in active_sessions:
+            # Check if session is still valid (not older than 24 hours)
+            last_activity = active_sessions[user_id]['last_activity']
+            session_age = datetime.utcnow() - last_activity
+            if session_age.total_seconds() < 86400:  # 24 hours
+                user['login_status'] = 'logged_in'
+                user['last_activity'] = last_activity.isoformat()
+                user['login_time'] = active_sessions[user_id]['login_time'].isoformat()
+            else:
+                # Session expired, remove it
+                del active_sessions[user_id]
+                user['login_status'] = 'logged_out'
+        else:
+            user['login_status'] = 'logged_out'
+    
     return users
+
+@api_router.post("/admin/logout-user")
+async def logout_user(action: AdminAction, admin_user: User = Depends(get_admin_user)):
+    """Immediately logout a specific user by terminating their session"""
+    try:
+        user_id = action.user_id
+        
+        # Remove from active sessions
+        if user_id in active_sessions:
+            # Add the current token to blacklist
+            token = active_sessions[user_id]['token']
+            blacklisted_tokens.add(token)
+            del active_sessions[user_id]
+        
+        # Also update the force logout timestamp for additional security
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": {"force_logout_at": datetime.utcnow()}}
+        )
+        
+        return {"message": "User logged out successfully", "user_id": user_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to logout user: {str(e)}")
 
 @api_router.post("/admin/force-logout")
 async def force_logout_user(action: AdminAction, admin_user: User = Depends(get_admin_user)):
