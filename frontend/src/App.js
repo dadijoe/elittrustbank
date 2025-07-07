@@ -178,11 +178,9 @@ const HomePage = () => {
           <div className="lg:hidden border-t border-gray-100 py-4 hidden">
             <div className="flex flex-col space-y-3">
               <a href="#personal" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium">Personal</a>
-              <a href="#small-business" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium">Small Business</a>
               <a href="#business" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium">Businesses & Institutions</a>
               <a href="#security" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium">Security</a>
               <a href="#about" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium">About Us</a>
-              <a href="#contact" onClick={handleNavClick} className="text-sm text-gray-700 hover:text-blue-600 font-medium">Contact us</a>
               <button
                 onClick={() => setShowLogin(true)}
                 className="sm:hidden text-left text-sm text-gray-700 hover:text-blue-600 font-medium"
