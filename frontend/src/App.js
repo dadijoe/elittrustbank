@@ -1959,7 +1959,6 @@ const AdminDashboard = () => {
           >
             All Users
           </button>
-          </button>
         </nav>
       </div>
 
