@@ -34,10 +34,39 @@ const AuthProvider = ({ children }) => {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       // Verify token validity by fetching dashboard
       fetchDashboard();
+      
+      // Set up force logout checking for logged in users
+      const forceLogoutInterval = setInterval(checkForceLogout, 2000); // Check every 2 seconds
+      
+      return () => clearInterval(forceLogoutInterval);
     } else {
       setLoading(false);
     }
-  }, []);
+  }, [user]);
+
+  const checkForceLogout = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token || !user) return;
+      
+      const response = await axios.get(`${API}/check-force-logout`);
+      if (response.data.force_logout) {
+        // Force logout the user immediately
+        localStorage.removeItem('token');
+        delete axios.defaults.headers.common['Authorization'];
+        setUser(null);
+        // Redirect to home page
+        window.location.href = '/';
+      }
+    } catch (error) {
+      // If there's an error (like 401), the user might already be logged out
+      if (error.response?.status === 401) {
+        localStorage.removeItem('token');
+        delete axios.defaults.headers.common['Authorization'];
+        setUser(null);
+      }
+    }
+  };
 
   const fetchDashboard = async () => {
     try {
