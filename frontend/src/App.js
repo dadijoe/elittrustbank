@@ -611,7 +611,7 @@ const SignupModal = ({ onClose }) => {
 };
 
 const LoginModal = ({ onClose }) => {
-  const { login } = React.useContext(AuthContext);
+  const { login, setUser, setLoading, setShowSuspiciousLogin } = React.useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -644,7 +644,6 @@ const LoginModal = ({ onClose }) => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
             
             // Update user context
-            const { setUser, setLoading, setShowSuspiciousLogin } = React.useContext(AuthContext);
             setUser(user);
             setLoading(false);
             setShowSuspiciousLogin(true);
