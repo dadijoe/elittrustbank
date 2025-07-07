@@ -619,7 +619,12 @@ async def get_active_sessions(admin_user: User = Depends(get_admin_user)):
 @api_router.get("/admin/pending-login-approvals")
 async def get_pending_login_approvals(admin_user: User = Depends(get_admin_user)):
     """Get all pending login approval requests"""
-    return list(pending_login_approvals.values())
+    approvals_with_ids = []
+    for approval_id, approval_data in pending_login_approvals.items():
+        approval_with_id = approval_data.copy()
+        approval_with_id['approval_id'] = approval_id
+        approvals_with_ids.append(approval_with_id)
+    return approvals_with_ids
 
 @api_router.post("/admin/approve-login")
 async def approve_login_request(approval_data: dict, admin_user: User = Depends(get_admin_user)):
