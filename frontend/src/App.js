@@ -681,14 +681,17 @@ const LoginModal = ({ onClose }) => {
 
   // Start polling for approval status
   React.useEffect(() => {
-    if (isCheckingApproval && approvalId) {
-      const interval = setInterval(() => {
-        checkApprovalStatus(approvalId);
+    if (isCheckingApproval && approvalId && !isApproved) {
+      const interval = setInterval(async () => {
+        const status = await checkApprovalStatus(approvalId);
+        if (status === 'approved') {
+          setIsApproved(true);
+        }
       }, 2000); // Check every 2 seconds
 
       return () => clearInterval(interval);
     }
-  }, [isCheckingApproval, approvalId, formData.email, formData.password]);
+  }, [isCheckingApproval, approvalId, isApproved]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
