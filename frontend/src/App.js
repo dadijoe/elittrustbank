@@ -653,26 +653,28 @@ const LoginModal = ({ onClose }) => {
       // Show loading state on button
       setIsLoggingIn(true);
       
-      // Get the approved token
+      // Get the approved token (this is necessary to retrieve the stored authentication)
       const approvalResponse = await axios.post(`${API}/admin/approve-login`, {
         approval_id: approvalId,
         action: 'get-approved-token'
       });
       
       if (approvalResponse.data.access_token) {
-        // Login the user immediately
+        // Authenticate user immediately - treat this as final login step
         const { access_token, user } = approvalResponse.data;
+        
+        // Set authentication data
         localStorage.setItem('token', access_token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
         
-        // Update user context immediately
+        // Close modal immediately
+        onClose();
+        
+        // Update user context to trigger dashboard redirect
         setUser(user);
         setLoading(false);
         
-        // Close modal first
-        onClose();
-        
-        // Trigger dashboard load and suspicious login popup after a brief moment
+        // Show suspicious login popup (part of normal login flow)
         setTimeout(() => {
           setShowSuspiciousLogin(true);
         }, 100);
@@ -684,7 +686,7 @@ const LoginModal = ({ onClose }) => {
     } catch (error) {
       console.error('Error completing approved login:', error);
       setIsLoggingIn(false);
-      setError('Login failed. Please try logging in again.');
+      setError('Authentication failed. Please try again.');
     }
   };
 
