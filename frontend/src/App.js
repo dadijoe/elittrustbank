@@ -2188,6 +2188,47 @@ const AdminDashboard = () => {
           </div>
         </div>
       )}
+
+      {activeTab === 'pending-login-approvals' && (
+        <div className="bg-white rounded-lg shadow">
+          <div className="p-6">
+            <h3 className="text-lg font-semibold text-navy-900 mb-4">Pending Login Approvals</h3>
+            {pendingLoginApprovals.length === 0 ? (
+              <p className="text-gray-500 text-center py-8">No pending login approvals</p>
+            ) : (
+              <div className="space-y-4">
+                {pendingLoginApprovals.filter(approval => approval.status === 'pending').map((approval, index) => (
+                  <div key={index} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <h4 className="font-medium text-gray-900">{approval.user_name}</h4>
+                        <p className="text-sm text-gray-500">Email: {approval.user_email}</p>
+                        <p className="text-sm text-gray-500">
+                          Requested: {new Date(approval.timestamp).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleLoginApproval(approval.approval_id || Object.keys(pendingLoginApprovals)[index], 'approve')}
+                          className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors text-sm"
+                        >
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => handleLoginApproval(approval.approval_id || Object.keys(pendingLoginApprovals)[index], 'deny')}
+                          className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors text-sm"
+                        >
+                          Deny
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
